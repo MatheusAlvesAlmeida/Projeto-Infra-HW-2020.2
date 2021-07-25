@@ -1,11 +1,11 @@
-module multiplier(
-    input wire clock,
-    input wire reset,
-    input wire multOrDiv,
-    input signed [31:0] A,
-    input signed [31:0] B,
-    output reg [31:0] hi, 
-    output reg [31:0] lo,
+module mult (
+    input  wire          clock,
+    input  wire          reset,
+    input  wire          MultOrDiv,
+    input  signed [31:0] A,
+    input  signed [31:0] B,
+    output reg    [31:0] hi, 
+    output reg    [31:0] lo,
 );
 
 reg [63:0] add;
@@ -14,14 +14,14 @@ reg [63:0] prod;
 
 always @(posedge clock) begin
     if(reset = 1'b1) begin
-        hi = 32'b0;
-		lo = 32'b0;
+        hi     = 32'b0;
+		lo     = 32'b0;
 		adicao = 64'b0;
         adicao = 64'b0;
     end
-    else if (multOrDiv == 1) begin
-        add = {A, 33'b0, 1'b0};
-        sub = {(~A + 1), 33'b0, 1'b0};
+    else if (MultOrDiv == 1) begin
+        add  = {A, 33'b0, 1'b0};
+        sub  = {(~A + 1), 33'b0, 1'b0};
         prod = {32'b0, B, 1'b0};
     end
     for (i = 0; i < 32; i++) begin
@@ -36,5 +36,6 @@ always @(posedge clock) begin
     hi = prod[64:33];
     lo = prod[32:1]; 
 end
+
 endmodule;
 

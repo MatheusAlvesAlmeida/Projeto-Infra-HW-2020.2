@@ -1,14 +1,14 @@
 module mux_MEMORY_REGISTERS (
-  input  wire [2:0]  MemToReg;
-  input  wire [31:0] input_1;
-  input  wire [31:0] input_2;
-  input  wire [31:0] input_3;
-  input  wire [31:0] input_4;
-  input  wire [31:0] input_5;
-  input  wire [31:0] input_6;
-  input  wire [31:0] input_7;
+  input  wire [2:0]  MemToReg,
+  input  wire [31:0] input_1,
+  input  wire [31:0] input_2,
+  input  wire [31:0] input_3,
+  input  wire [31:0] input_4,
+  input  wire [31:0] input_5,
+  input  wire [31:0] input_6,
+  input  wire [31:0] input_7,
 
-  output wire [31:0] result;
+  output wire [31:0] result,
 );
 
   wire [31:0] aux_1;
