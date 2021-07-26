@@ -31,21 +31,26 @@ parameter stateSRAV     = 6'd18;
 parameter stateSRL      = 6'd19;
 parameter stateSLT      = 6'd20;
 parameter stateSLTI     = 6'd21;
-parameter stateXCHG     = 6'd22;
+parameter stateBREAK     = 6'd22;
 parameter stateMFHI     = 6'd23;
 parameter stateMFLO     = 6'd24;
 parameter stateJUMP     = 6'd25;
 parameter stateJAL      = 6'd26;
 parameter stateLW       = 6'd27;
 parameter stateSW       = 6'd28;
-parameter stateOPCODE_EX = 6'd29;
 parameter stateADDIU    = 6'd30;
 parameter stateADDM     = 6'd31;
 parameter stateADDM     = 6'd32;
 parameter stateADDM     = 6'd33;
+parameter stateDECODE   = 6'd34;
+
+//Exceções
+parameter opcodeNX = 7'd253;
+parameter overflow = 7'd254;
+parameter divByZero = 7'd255;
 
 initial begin
-		nextState <= stateFETCH;
+		nextState <= stateRESET;
 end
 
 always @(posedge clk or posedge reset) begin
@@ -55,8 +60,28 @@ always @(posedge clk or posedge reset) begin
         currentState <= nextState;
 end
 
-always @(posedge clk) begin
-    if() begin end
+//coloquem aq os estados à medida que forem implementando, não vou colocar todos de uma vez. Obg!
+always @(negedge clk) begin
+    if(reset) begin
+        currentState = stateRESET;
 
+    end
+    else begin
+        case (currentState)
+        stateRESET: begin
+            
+        end
+        stateFETCH: begin
+            
+        end
+        stateDECODE begin
+            case (OPCODE) begin
+                //Coloquem aqui os estados
+                default: begin
+                    nextstate <= opcodeNX;
+                end
+            end
+        end
+    end
     
 end
