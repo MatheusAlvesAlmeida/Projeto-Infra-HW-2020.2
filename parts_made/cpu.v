@@ -59,6 +59,7 @@ module cpu (
     wire [31:0] SetSize_output;
     wire [31:0] Memory_output;
     //MEMORY DATA REGISTER
+    wire MemoryDataRegister_write;
     wire [31:0] MemoryDataRegister_output;
     //DETSIZE
     wire [31:0] DetSize_output;
@@ -131,7 +132,75 @@ module cpu (
         OFFSET,
     );
 
-    // Unidade de Controle
+    //SETSIZE falta a definição em vhdl
+    SETSIZE(
+        SetSizeCtrl,
+        B_output,
+        MemoryDataRegister_output,
+        SetSize_output
+    );
+    
+    //Memory data register
+    Registrador MemDataReg(
+        clk,
+        reset,
+        load,
+        MemoryDataRegister_write,
+        Memory_output,
+        MemoryDataRegister_output
+    );
+
+    //Falta a definição >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    DetSize(
+        DetSizeCtrl,
+        MemoryDataRegister_output,
+        DetSize_output
+    );
+
+    //Sign-extend 1-32, falta definir >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    SignExtend_1_32(
+        LT,
+        SignExtend_1_32_output
+    );
+
+    //Mult e div
+    mult Mult(
+        clk,
+        reset,
+        MultOrDiv,
+        A_output,
+        B_output,
+        mult_output_HI,
+        mult_output_LO,
+        Controle
+    );
+    div Div(
+        clk,
+        reset,
+        MultOrDiv,
+        A_output,
+        B_output,
+        div_output_HI,
+        div_output_LO,
+        Div0
+    );
+
+
+    //Falta definir HI e LO ???????? >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>......
+    HI(
+        HIWrite,
+        mux_HI_output
+    );
+    LO(
+        LOWrite,
+        mux_LO_output
+    );
+
+
+
+
+
+
     ControlUnity_(clk, reset, OPCODE, Overflow, Zero, LT, GT, Div0, IRWrite, RegDst, RegWrite, WriteA, WriteB,  ALUSrcA, ALUSrcB, ALUOp, EPCWrite, PCSource, PCWrite, MemToReg);
 
 endmodule
