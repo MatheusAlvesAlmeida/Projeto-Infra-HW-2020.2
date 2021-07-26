@@ -131,4 +131,7 @@ module cpu (
         OFFSET,
     );
 
+    // Unidade de Controle
+    ControlUnity_(clk, reset, OPCODE, Overflow, Zero, LT, GT, Div0, IRWrite, RegDst, RegWrite, WriteA, WriteB,  ALUSrcA, ALUSrcB, ALUOp, EPCWrite, PCSource, PCWrite, MemToReg);
+
 endmodule
