@@ -213,6 +213,46 @@ always @(negedge clk) begin
                 LoWrite        = 1'b1;
                 cycle          = 3'b010;
             end
+            else if (cycle = 3'b010) begin
+                currentState <= stateDIV;
+                PCWriteCond    = 1'b0; 
+                PCWrite        = 1'b0;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 1'b0;
+                SetSizeCtrl    = 1'b0;
+                ALUoutputWrite = 1'b0;
+                PCSource       = 2'b00;
+                AluControl     = 3'b000;
+                ALUOp          = 3'b000;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b00;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                EPCWrite       = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 1'b0;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                Div0           = 1'b0;
+                LT             = 1'b0;
+                GT             = 1'b0;
+                EG             = 1'b0;
+                Zero           = 1'b0;
+                OverfLow       = 1'b0;
+                //parte do div
+                MultOrDiv      = 1'b1;
+                HiWrite        = 1'b1;
+                LoWrite        = 1'b1;
+                OverfLow       = 1'b1;
+                cycle          = 3'b010;
+            end
 
         end
         stateMULT: begin
