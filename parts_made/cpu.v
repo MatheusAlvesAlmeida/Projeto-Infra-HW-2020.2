@@ -24,7 +24,7 @@ module cpu (
     wire       RegWrite;
     wire       RegDst;
     wire       EPCWrite;
-    wire [1:0] ShiftControl;
+    wire [2:0] ShiftControl;
     wire [1:0] ShiftAmt;
     wire       ShiftSrc;
     wire       WriteA;
