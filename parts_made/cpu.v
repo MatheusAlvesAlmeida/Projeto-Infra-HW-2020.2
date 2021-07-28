@@ -26,7 +26,7 @@ module cpu (
     wire       EPCWrite;
     wire [2:0] ShiftControl;
     wire [1:0] ShiftAmt;
-    wire       ShiftSrc;
+    wire [1:0] ShiftSrc;
     wire       WriteA;
     wire       WriteB;
     wire       WriteAuxA;
@@ -140,7 +140,6 @@ module cpu (
         SetSize_output
     );
     
-    //Memory data register
     Registrador MemDataReg(
         clk,
         reset,
@@ -187,11 +186,12 @@ module cpu (
 
 
     //Falta definir HI e LO ???????? >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>......
-    HI(
+    Registrador HI(
         HIWrite,
         mux_HI_output
     );
-    LO(
+
+    Registrador LO(
         LOWrite,
         mux_LO_output
     );
