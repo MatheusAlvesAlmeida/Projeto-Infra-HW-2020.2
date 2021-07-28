@@ -1,8 +1,24 @@
-module ControlUnity_(input wire clk, input wire reset, 
+module ControlUnity_(
+    input wire clk,
+    input wire reset, 
     input wire OPCODE, 
-    input wire Overflow, input wire Zero, input wire LT, input wire GT, input wire Div0, 
-    input wire IRWrite, input wire RegDst, input wire RegWrite, input wire WriteA, input wire WriteB,
-    input wire ALUSrcA, input wire ALUSrcB, input wireALUOp, input wire EPCWrite, input wire PCSource, input wire PCWrite, input wire MemToReg
+    input wire Overflow,
+    input wire Zero,
+    input wire LT,
+    input wire GT,
+    input wire Div0, 
+    input wire IRWrite,
+    input wire RegDst,
+    input wire RegWrite,
+    input wire WriteA,
+    input wire WriteB,
+    input wire ALUSrcA,
+    input wire ALUSrcB,
+    input wire ALUOp,
+    input wire EPCWrite,
+    input wire PCSource,
+    input wire PCWrite,
+    input wire MemToReg
 );
 
 // Controladores do estado atual
@@ -31,7 +47,7 @@ parameter stateSRAV     = 6'd18;
 parameter stateSRL      = 6'd19;
 parameter stateSLT      = 6'd20;
 parameter stateSLTI     = 6'd21;
-parameter stateBREAK     = 6'd22;
+parameter stateBREAK    = 6'd22;
 parameter stateMFHI     = 6'd23;
 parameter stateMFLO     = 6'd24;
 parameter stateJUMP     = 6'd25;
@@ -45,9 +61,9 @@ parameter stateADDM     = 6'd33;
 parameter stateDECODE   = 6'd34;
 
 //Exceções
-parameter opcodeNX = 7'd253;
-parameter overflow = 7'd254;
-parameter divByZero = 7'd255;
+parameter opcodeNX      = 7'd253;
+parameter overflow      = 7'd254;
+parameter divByZero     = 7'd255;
 
 initial begin
 		nextState <= stateRESET;

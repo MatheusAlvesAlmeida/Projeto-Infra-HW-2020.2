@@ -59,7 +59,7 @@ module cpu (
     wire [31:0] SetSize_output;
     wire [31:0] Memory_output;
     //MEMORY DATA REGISTER
-    wire MemoryDataRegister_write;
+    wire        MemoryDataRegister_write;
     wire [31:0] MemoryDataRegister_output;
     //DETSIZE
     wire [31:0] DetSize_output;
@@ -132,7 +132,7 @@ module cpu (
         OFFSET,
     );
 
-    //SETSIZE falta a definição em vhdl
+    //SETSIZE falta a definição >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     SETSIZE(
         SetSizeCtrl,
         B_output,
@@ -149,20 +149,18 @@ module cpu (
         MemoryDataRegister_output
     );
 
-    //Falta a definição >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    //DETSIZE Falta a definição >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     DetSize(
         DetSizeCtrl,
         MemoryDataRegister_output,
         DetSize_output
     );
 
-    //Sign-extend 1-32, falta definir >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    SignExtend_1_32(
+    SignExtend_1_32 SignExtend_1_32(
         LT,
         SignExtend_1_32_output
     );
 
-    //Mult e div
     mult Mult(
         clk,
         reset,
@@ -171,8 +169,8 @@ module cpu (
         B_output,
         mult_output_HI,
         mult_output_LO,
-        Controle
     );
+
     div Div(
         clk,
         reset,
@@ -184,23 +182,38 @@ module cpu (
         Div0
     );
 
-
-    //Falta definir HI e LO ???????? >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>......
     Registrador HI(
         HIWrite,
-        mux_HI_output
+        mux_HI_output,
+        HI_output
     );
 
     Registrador LO(
         LOWrite,
-        mux_LO_output
+        mux_LO_output,
+        LO_output
+    );
+
+    Registrador A(
+        WriteA,
+        ReadData1_output,
+        A_output
+    );
+
+    Registrador AuxA(
+        WriteAuxA,
+        MemoryDataRegister_output,
+        aux_A_output
+    );
+
+    Registrador B(
+        WriteB,
+        ReadData2_output,
+        B_output
     );
 
 
-
-
-
-
-    ControlUnity_(clk, reset, OPCODE, Overflow, Zero, LT, GT, Div0, IRWrite, RegDst, RegWrite, WriteA, WriteB,  ALUSrcA, ALUSrcB, ALUOp, EPCWrite, PCSource, PCWrite, MemToReg);
+    ctrl_unit_(clk, reset, OPCODE, Overflow, Zero, LT, GT, Div0, IRWrite, RegDst, RegWrite, WriteA, WriteB,  ALUSrcA, ALUSrcB, ALUOp, EPCWrite, PCSource, PCWrite, MemToReg);
 
 endmodule
+ 
