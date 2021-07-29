@@ -590,6 +590,93 @@ always @(negedge clk) begin
             nextState <= stateCOMMON;
         end
 
+
+
+
+        //Veriicar 
+        stateJUMP: begin
+            reg cycle = 3'b000;
+            if (cycle == 3'b00) begin
+                currentState <= stateJUMP;
+                PCWriteCond    = 1'b0; 
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 1'b0;
+                SetSizeCtrl    = 1'b0;
+                ALUoutputWrite = 1'b0;
+                AluControl     = 3'b000;
+                MemToReg       = 3'b000;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                EPCWrite       = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 1'b0;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                Div0           = 1'b0;
+                LT             = 1'b0;
+                GT             = 1'b0;
+                EG             = 1'b0;
+                Zero           = 1'b0;
+                OverfLow       = 1'b0;
+                MultOrDiv      = 1'b0;
+                //Parte do j#
+                PCWrite = 1'b1;
+                PCSource = 2'b10;
+
+                cycle          = 1'b'1;
+            end
+            if (cycle == 2'b1) begin
+                currentState <= stateJUMP;
+                nextState <= stateCOMMON;
+                PCWriteCond    = 1'b0; 
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 1'b0;
+                SetSizeCtrl    = 1'b0;
+                ALUoutputWrite = 1'b0;
+                AluControl     = 3'b000;
+                MemToReg       = 3'b000;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                EPCWrite       = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 1'b0;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                Div0           = 1'b0;
+                LT             = 1'b0;
+                GT             = 1'b0;
+                EG             = 1'b0;
+                Zero           = 1'b0;
+                OverfLow       = 1'b0;
+                MultOrDiv      = 1'b0;
+                //Parte do j#
+                PCWrite = 1'b0;
+                PCSource = 2'b00;
+            end
+        end
+
+        stateJAL: begin
+            
+        end
+
+
+
         //Exceções#
         stateEXCEPTIONS: begin
             if (Overflow) begin
