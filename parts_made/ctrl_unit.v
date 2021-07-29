@@ -45,7 +45,7 @@ wire [5:0] auxOffset = offset;
 // Todos estados
 parameter stateRESET    = 6'd0;
 parameter stateCOMMON   = 6'd1;
-parameter stateFETCH    = 6'd2; 
+// parameter stateFETCH    = 6'd2; 
 parameter stateADD      = 6'd3; 
 parameter stateADDI     = 6'd4; 
 parameter stateSUB      = 6'd5; 
@@ -97,18 +97,19 @@ end
 //coloquem aq os estados à medida que forem implementando, não vou colocar todos de uma vez. Obg!
 always @(negedge clk) begin
     if(reset) begin
-        currentState = stateRESET;
-
+        currentState <= stateRESET;
+        reset = 1'b0;
     end
     else begin
         case (currentState)
         stateRESET: begin
-            
+
+            nextState <= stateDECODE;
         end
-        // stateFETCH: begin
+        // stateCOMMON: begin
             
         // end
-        stateDECODE begin
+        stateDECODE: begin
             //PREENCHER AQUI AS COISAS SOBRE O DECODE
             case (OPCODE) begin
                 //Coloquem aqui os estados
@@ -121,16 +122,17 @@ always @(negedge clk) begin
                             currentState <= stateDIV;
                         end
                         mfhi: begin
-                            currentState <= stateMFHI
+                            currentState <= stateMFHI;
                         end
                         mflo: begin
-                            currentState <= stateMFLO
+                            currentState <= stateMFLO;
                         end
                         jr: begin
-                            currentState <= stateJR
+                            currentState <= stateJR;
                         end
                     end
                 end
+
                 default: begin
                     nextstate <= opcodeNX;
                 end
@@ -423,7 +425,6 @@ always @(negedge clk) begin
                 cycle          = 3'b011;
             end
             else if(cycle = 3'b011) begin
-                currentState <= stateCOMMON
                 PCWriteCond    = 1'b0; 
                 PCWrite        = 1'b0;
                 IorD           = 2'b00;
@@ -592,15 +593,15 @@ always @(negedge clk) begin
         //Exceções#
         stateEXCEPTIONS: begin
             if (Overflow) begin
-                SrcAddressMem <= 3'd3;
+                 <= 3'd3;
             end
             else if (Div0) begin
-                SrcAddressMem <= 3'd4;
+                 <= 3'd4;
             end
             else begin
-                SrcAddressMem <= 3'd2;
+                 <= 3'd2;
             end
         end
     end
-    
+
 end
