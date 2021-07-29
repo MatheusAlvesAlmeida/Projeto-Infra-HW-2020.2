@@ -1,40 +1,40 @@
 module ControlUnity_(
-    input wire clk,
-    input wire reset,
-    input wire OPCODE,
-    input wire       PCWriteCond;
-    input wire       PCWrite;     
-    input wire [1:0] IorD;        
-    input wire       MemRead;         
-    input wire       MemWrite;        
-    input wire [2:0] MemToReg;        
-    input wire       IRWrite;     
-    input wire       MultOrDiv;       
-    input wire       HIWrite;     
-    input wire       LOWrite;     
-    input wire [1:0] Exception;       
-    input wire [1:0] DetSizeCtrl;     
-    input wire [1:0] SetSizeCtrl; 
-    input wire       ALUoutputWrite;  
-    input wire [1:0] PCSource;        
-    input wire [2:0] ALUOp;       
-    input wire [2:0] ALUSrcB;     
-    input wire [1:0] ALUSrcA;     
-    input wire       RegWrite;        
-    input wire       RegDst;          
-    input wire       EPCWrite;        
-    input wire [2:0] ShiftControl;        
-    input wire [1:0] ShiftAmt;        
-    input wire       ShiftSrc;        
-    input wire       WriteA;      
-    input wire       WriteB;      
-    input wire       WriteAuxA;       
-    output wire      Div0;        
-    output wire      LT;              
-    output wire      GT;              
-    output wire      EG;              
-    output wire      Zero;            
-    output wire      OverfLow;
+    input  wire       clk,
+    input  wire       reset,
+    input  wire       OPCODE,
+    output wire       PCWriteCond;
+    output wire       PCWrite;     
+    output wire [1:0] IorD;        
+    output wire       MemRead;         
+    output wire       MemWrite;        
+    output wire [2:0] MemToReg;        
+    output wire       IRWrite;     
+    output wire       MultOrDiv;       
+    output wire       HIWrite;     
+    output wire       LOWrite;     
+    output wire [1:0] Exception;       
+    output wire [1:0] DetSizeCtrl;     
+    output wire [1:0] SetSizeCtrl; 
+    output wire       ALUoutputWrite;  
+    output wire [1:0] PCSource;        
+    output wire [2:0] ALUOp;       
+    output wire [2:0] ALUSrcB;     
+    output wire [1:0] ALUSrcA;     
+    output wire       RegWrite;        
+    output wire       RegDst;          
+    output wire       EPCWrite;        
+    output wire [2:0] ShiftControl;        
+    output wire [1:0] ShiftAmt;        
+    output wire       ShiftSrc;        
+    output wire       WriteA;      
+    output wire       WriteB;      
+    output wire       WriteAuxA;       
+    input  wire       Div0;        
+    input  wire       LT;              
+    input  wire       GT;              
+    input  wire       EG;              
+    input  wire       Zero;            
+    input  wire       OverfLow;
 );
 
 // Controladores do estado atual
@@ -98,15 +98,16 @@ end
 always @(negedge clk) begin
     if(reset) begin
         currentState = stateRESET;
+
     end
     else begin
         case (currentState)
         stateRESET: begin
             
         end
-        stateFETCH: begin
+        // stateFETCH: begin
             
-        end
+        // end
         stateDECODE begin
             //PREENCHER AQUI AS COISAS SOBRE O DECODE
             case (OPCODE) begin
@@ -253,7 +254,7 @@ always @(negedge clk) begin
                 MultOrDiv      = 1'b1;
                 HiWrite        = 1'b1;
                 LoWrite        = 1'b1;
-                OverfLow       = 1'b1;
+                divByZero       = 1'b1;
                 cycle          = 3'b011;
             end
             else if(cycle = 3'b011) begin
@@ -293,8 +294,12 @@ always @(negedge clk) begin
                 MultOrDiv      = 1'b0;
                 HiWrite        = 1'b0;
                 LoWrite        = 1'b0;
-                OverfLow       = 1'b0;
-                cycle          = 3'b000;
+                if(div0)begin
+                    
+                end
+                else begin
+                    nextState <= stateCOMMON;
+                end
             end
         end
         stateMULT: begin
@@ -454,8 +459,12 @@ always @(negedge clk) begin
                 MultOrDiv      = 1'b0;
                 HiWrite        = 1'b0;
                 LoWrite        = 1'b0;
-                OverfLow       = 1'b0;
-                cycle          = 3'b000;
+                if(OverfLow)begin
+                    
+                end
+                else begin
+                    nextState <= stateCOMMON;
+                end
             end
         end
         stateMFHI: begin
@@ -495,6 +504,8 @@ always @(negedge clk) begin
             //parte do mfhi
             MemToReg       = 3'b010;
             RegWrite       = 1'b1;
+
+            nextState <= stateCOMMON;
         end
         stateMFLO: begin
             currentState <= stateMFHI;
@@ -533,6 +544,8 @@ always @(negedge clk) begin
             //parte do mflo
             MemToReg       = 3'b011;
             RegWrite       = 1'b1;
+
+            nextState <= stateCOMMON;
         end
         stateJR: begin
             currentState <= stateJR;
@@ -572,6 +585,21 @@ always @(negedge clk) begin
             //aluoutcontrol#
             PCSource       = 2'b00;
             PCWrite        = 1'b0;
+
+            nextState <= stateCOMMON;
+        end
+
+        //Exceções#
+        stateEXCEPTIONS: begin
+            if (Overflow) begin
+                SrcAddressMem <= 3'd3;
+            end
+            else if (Div0) begin
+                SrcAddressMem <= 3'd4;
+            end
+            else begin
+                SrcAddressMem <= 3'd2;
+            end
         end
     end
     
