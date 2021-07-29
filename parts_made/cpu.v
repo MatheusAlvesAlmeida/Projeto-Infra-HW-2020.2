@@ -16,7 +16,8 @@ module cpu (
     wire [1:0] Exception;
     wire [1:0] DetSizeCtrl;
     wire [1:0] SetSizeCtrl;
-    wire       ALUoutputWrite;
+    wire       doConcatenate;
+    wire       ALUOutWrite;
     wire [1:0] PCSource;
     wire [2:0] ALUOp;
     wire [2:0] ALUSrcB;
@@ -41,10 +42,11 @@ module cpu (
 
     // data wires
     //Instructions
-    wire [15:0] inst0_15;
-    wire [4:0] inst16_20;
-    wire [4:0] inst21_25;
-    wire [5:0] inst26_31;
+    wire [15:0] inst_0_15;
+    wire [4:0]  inst_16_20;
+    wire [4:0]  inst_6_10;
+    wire [4:0]  inst_21_25;
+    wire [5:0]  inst_26_31;
     // MUXS
     wire [31:0] mux_A_ULA_output;
     wire [31:0] mux_B_ULA_output;
@@ -64,7 +66,7 @@ module cpu (
     wire [31:0] SetSize_output;
     wire [31:0] Memory_output;
     //MEMORY DATA REGISTER
-    wire MemoryDataRegister_write;
+    wire        MemoryDataRegister_write;
     wire [31:0] MemoryDataRegister_output;
     //DETSIZE
     wire [31:0] DetSize_output;
@@ -137,15 +139,13 @@ module cpu (
         OFFSET,
     );
 
-    //SETSIZE falta a definição em vhdl
-    SETSIZE(
+    set_size SETSIZE(
         SetSizeCtrl,
         B_output,
         MemoryDataRegister_output,
         SetSize_output
     );
     
-    //Memory data register
     Registrador MemDataReg(
         clk,
         reset,
@@ -155,20 +155,17 @@ module cpu (
         MemoryDataRegister_output
     );
 
-    //Falta a definição >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    DetSize(
+    det_size DetSize(
         DetSizeCtrl,
         MemoryDataRegister_output,
         DetSize_output
     );
 
-    //Sign-extend 1-32, falta definir >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    SignExtend_1_32(
+    SignExtend_1_32 SignExtend_1_32(
         LT,
         SignExtend_1_32_output
     );
 
-    //Mult e div
     mult Mult(
         clk,
         reset,
@@ -177,8 +174,8 @@ module cpu (
         B_output,
         mult_output_HI,
         mult_output_LO,
-        Controle
     );
+
     div Div(
         clk,
         reset,
@@ -190,47 +187,77 @@ module cpu (
         Div0
     );
 
-
-    //Falta definir HI e LO ???????? >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>......
-    HI(
+    Registrador HI(
         HIWrite,
-        mux_HI_output
+        mux_HI_output,
+        HI_output,
     );
-    LO(
+
+    Registrador LO(
         LOWrite,
-        mux_LO_output
+        mux_LO_output,
+        LO_output,
     );
 
-
-    //MUXS
-    mux_EXCEPTIONS mux_Exc(
-        Exception,
-        mux_EXCEPTIONS_output
+    Registrador A(
+        WriteA,
+        ReadData1_output,
+        A_output
     );
 
-    mux_PC_MEMORY mux_PC(
-        IorD,
+    Registrador AuxA(
+        WriteAuxA,
+        MemoryDataRegister_output,
+        aux_A_output
+    );
+
+    Registrador B(
+        WriteB,
+        ReadData2_output,
+        B_output
+    );
+
+    mux_A_ULA mux_A(
+        ALUSrcA,
         PC_output,
-        ALUOut_output,
+        A_output,
+        aux_A_output,
+        mux_A_ULA_output,
+    );
+
+    mux_B_ULA mux_B(
+        ALUSrcB,
+        B_output,
+        SignExtend_16_32_output,
+        ShifLeft_2_down_output,
+        MemoryDataRegister_output,
+        mux_B_ULA_output,
+    );
+
+    mux_EXCEPTIONS mux_Exceptions(
+        Exception,
         mux_EXCEPTIONS_output
     );
 
     mux_HI mux_Hi(
         MultOrDiv,
         mult_output_HI,
-        div_output_HI
-    );
-
-    mux_LO mux_Lo(
-        MultOrDiv,
-        mult_output_LO
-        div_output_LO
+        div_output_HI,
+        mux_HI_output,
     );
 
     mux_IR_REGISTERS mux_Ir_Reg(
         RegDst,
         inst16_20,
-        inst0_15
+        inst0_15,
+        mux_IR_REGISTERS_output,
+    );
+
+    mux_LO mux_Lo(
+        MultOrDiv,
+        mult_output_LO,
+        div_output_LO,
+        mux_LO_output,
     );
 
     mux_MEMORY_REGISTERS mux_Mem_Reg(
@@ -241,25 +268,79 @@ module cpu (
         LO_output,
         ShifReg_output,
         SignExtend_1_32_output,
-        ShiftLeft_16_32_output
+        ShiftLeft_16_32_output,
+        mux_MEMORY_REGISTERS_output,
     );
 
-    mux_SHIFT_SRC_output mux_Shift_Src(
-        ShiftSrc,
-        LO_output,
-        B_output,
-        inst0_15
+    mux_PC_MEMORY mux_PC_Memory(
+        IorD,
+        PC_output,
+        ALUOut_output,
+        mux_EXCEPTIONS_output,
+        mux_PC_MEMORY_output,
     );
-    // O 16 tá certo aqui ????????????????????????????????/
+
     mux_SHIFT_AMT mux_Shift_Amt(
         ShiftAmt,
         B_output,
-        inst0_15,
+        inst_6_10,
         MemoryDataRegister_output,
-        16
-    )
+        mux_SHIFT_AMT_output,
+    );
 
+    mux_SHIFT_SRC mux_Shift_Src(
+        ShiftSrc,
+        A_output,
+        B_output,
+        mux_SHIFT_SRC_output,
+    );
 
-    ControlUnity_(clk, reset, OPCODE, Overflow, Zero, LT, GT, Div0, IRWrite, RegDst, RegWrite, WriteA, WriteB,  ALUSrcA, ALUSrcB, ALUOp, EPCWrite, PCSource, PCWrite, MemToReg);
+    mux_ULA_PC mux_Ula_PC(
+        PCSource,
+        EPC_output,
+        ALUOut_output,
+        concatenar_output,
+        ALUResult,
+        PC_input,
+    );
+
+    RegDesloc reg_desloc(
+        ShiftControl,
+        mux_SHIFT_SRC_output,
+        mux_SHIFT_AMT_output,
+        ShifReg_output,
+    );
+
+    Registrador ALUOut(
+        ALUOutWrite,
+        ALUResult,
+        ALUOut_output,
+    );
+
+    concatenate concatenar(
+        doConcatenate,
+        ShifLeft_2_up_output,
+        PC_output,
+        concatenar_output,
+    );
+
+    Registrador EPC(
+        EPCWrite,
+        PC_output,
+        EPC_output,
+    );
+    
+    ula32 ULA(
+        ALUOp, //criar o alu control
+        mux_A_ULA_output,
+        mux_B_ULA_output,
+        Overflow,
+        LT,
+        GT,
+        Zero,
+        ALUResult,
+    );
+
+    ctrl_unit_(clk, reset, OPCODE, Overflow, Zero, LT, GT, Div0, IRWrite, RegDst, RegWrite, WriteA, WriteB,  ALUSrcA, ALUSrcB, ALUOp, EPCWrite, PCSource, PCWrite, MemToReg);
 
 endmodule
