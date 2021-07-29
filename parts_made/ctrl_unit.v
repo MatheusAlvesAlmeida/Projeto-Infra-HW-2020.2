@@ -79,9 +79,10 @@ parameter stateADDM     = 6'd33;
 parameter stateDECODE   = 6'd34;
 
 //Exceções
-parameter opcodeNX      = 7'd253;
-parameter overflow      = 7'd254;
-parameter divByZero     = 7'd255;
+parameter exceptionOPCODE    = 7'd253;
+parameter exceptionOverflow  = 7'd254;
+parameter exceptionDivByZero = 7'd255;
+parameter waitAndPCwrite     = 6'd35;;
 
 initial begin
     nextState <= stateRESET;
@@ -134,7 +135,7 @@ always @(negedge clk) begin
                 end
 
                 default: begin
-                    nextstate <= opcodeNX;
+                    nextstate <= exceptionOPCODE;
                 end
             end
         end
@@ -297,7 +298,7 @@ always @(negedge clk) begin
                 HiWrite        = 1'b0;
                 LoWrite        = 1'b0;
                 if(div0)begin
-                    
+                    currentState <= exceptionDivByZero;
                 end
                 else begin
                     nextState <= stateCOMMON;
@@ -461,7 +462,7 @@ always @(negedge clk) begin
                 HiWrite        = 1'b0;
                 LoWrite        = 1'b0;
                 if(OverfLow)begin
-                    
+                    currentState <= exceptionOverflow;
                 end
                 else begin
                     nextState <= stateCOMMON;
@@ -580,18 +581,15 @@ always @(negedge clk) begin
             OverfLow       = 1'b0;
             MultOrDiv      = 1'b0;
             //parte do jr
-            ALUSrcA        = 2'b00;
+            ALUSrcA        = 2'b01;
             ALUSrcB        = 2'b00;
             ALUOp          = 3'b000;
             //aluoutcontrol#
-            PCSource       = 2'b00;
-            PCWrite        = 1'b0;
+            PCSource       = 3'b11;
+            PCWrite        = 1'b1;
 
             nextState <= stateCOMMON;
         end
-
-
-
 
         //Veriicar 
         stateJUMP: begin
@@ -988,18 +986,333 @@ always @(negedge clk) begin
             
         end
 
-
-
         //Exceções#
-        stateEXCEPTIONS: begin
-            if (Overflow) begin
-                 <= 3'd3;
+        exceptionOverflow: begin
+            reg cycle = 3'b000;
+            if(cycle = 3'b000) begin
+                PCWriteCond    = 1'b0; 
+                PCWrite        = 1'b0;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 1'b0;
+                SetSizeCtrl    = 1'b0;
+                ALUoutputWrite = 1'b0;
+                PCSource       = 2'b00;
+                ALUOp          = 3'b000;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 1'b0;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                Div0           = 1'b0;
+                LT             = 1'b0;
+                GT             = 1'b0;
+                EG             = 1'b0;
+                Zero           = 1'b0;
+                OverfLow       = 1'b0;
+                MultOrDiv      = 1'b0;
+                //parte do overflow
+                cycle          = 3'b001;
+                AluControl     = 3'b010;
+                EPCWrite       = 1'b1;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b01;
+                MemWrite       = 32'd254;
             end
-            else if (Div0) begin
-                 <= 3'd4;
+            if(cycle = 3'b001) begin
+                PCWriteCond    = 1'b0; 
+                PCWrite        = 1'b0;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 1'b0;
+                SetSizeCtrl    = 1'b0;
+                ALUoutputWrite = 1'b0;
+                PCSource       = 2'b00;
+                ALUOp          = 3'b000;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 1'b0;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                Div0           = 1'b0;
+                LT             = 1'b0;
+                GT             = 1'b0;
+                EG             = 1'b0;
+                Zero           = 1'b0;
+                OverfLow       = 1'b0;
+                MultOrDiv      = 1'b0;
+                //parte do overflow
+                cycle          = 3'b001;
+                AluControl     = 3'b010;
+                EPCWrite       = 1'b1;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b01;
+                MemWrite       = 32'd254;
+                currentState <= waitAndPCwrite;
             end
-            else begin
-                 <= 3'd2;
+        end
+
+        exceptionOPCODE: begin
+            reg cycle = 3'b000;
+            if(cycle = 3'b000) begin
+                PCWriteCond    = 1'b0; 
+                PCWrite        = 1'b0;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 1'b0;
+                SetSizeCtrl    = 1'b0;
+                ALUoutputWrite = 1'b0;
+                PCSource       = 2'b00;
+                ALUOp          = 3'b000;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 1'b0;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                Div0           = 1'b0;
+                LT             = 1'b0;
+                GT             = 1'b0;
+                EG             = 1'b0;
+                Zero           = 1'b0;
+                OverfLow       = 1'b0;
+                MultOrDiv      = 1'b0;
+                //parte do opcode n x
+                cycle          = 3'b001;
+                AluControl     = 3'b010;
+                EPCWrite       = 1'b1;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b01;
+                MemWrite       = 32'd253;
+            end
+            if(cycle = 3'b001) begin
+                PCWriteCond    = 1'b0; 
+                PCWrite        = 1'b0;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 1'b0;
+                SetSizeCtrl    = 1'b0;
+                ALUoutputWrite = 1'b0;
+                PCSource       = 2'b00;
+                ALUOp          = 3'b000;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 1'b0;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                Div0           = 1'b0;
+                LT             = 1'b0;
+                GT             = 1'b0;
+                EG             = 1'b0;
+                Zero           = 1'b0;
+                OverfLow       = 1'b0;
+                MultOrDiv      = 1'b0;
+                //parte do opcode n x
+                cycle          = 3'b001;
+                AluControl     = 3'b010;
+                EPCWrite       = 1'b1;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b01;
+                MemWrite       = 32'd253;
+                currentState <= waitAndPCwrite;
+            end
+        end
+
+        exceptionDivByZero: begin
+            reg cycle = 3'b000;
+            if(cycle = 3'b000) begin
+                PCWriteCond    = 1'b0; 
+                PCWrite        = 1'b0;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 1'b0;
+                SetSizeCtrl    = 1'b0;
+                ALUoutputWrite = 1'b0;
+                PCSource       = 2'b00;
+                ALUOp          = 3'b000;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 1'b0;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                Div0           = 1'b0;
+                LT             = 1'b0;
+                GT             = 1'b0;
+                EG             = 1'b0;
+                Zero           = 1'b0;
+                OverfLow       = 1'b0;
+                MultOrDiv      = 1'b0;
+                //parte do div0
+                cycle          = 3'b001;
+                AluControl     = 3'b010;
+                EPCWrite       = 1'b1;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b01;
+                MemWrite       = 32'd255;
+            end
+            if(cycle = 3'b001) begin
+                PCWriteCond    = 1'b0; 
+                PCWrite        = 1'b0;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 1'b0;
+                SetSizeCtrl    = 1'b0;
+                ALUoutputWrite = 1'b0;
+                PCSource       = 2'b00;
+                ALUOp          = 3'b000;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 1'b0;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                Div0           = 1'b0;
+                LT             = 1'b0;
+                GT             = 1'b0;
+                EG             = 1'b0;
+                Zero           = 1'b0;
+                OverfLow       = 1'b0;
+                MultOrDiv      = 1'b0;
+                //parte do div0
+                cycle          = 3'b001;
+                AluControl     = 3'b010;
+                EPCWrite       = 1'b1;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b01;
+                MemWrite       = 32'd255;
+                currentState <= waitAndPCwrite;
+            end
+        end
+
+        waitAndPCwrite: begin
+            reg cycle = 3'b000;
+            if(cycle = 3'b000)begin
+                PCWriteCond    = 1'b0; 
+                PCWrite        = 1'b0;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 1'b0;
+                SetSizeCtrl    = 1'b0;
+                ALUoutputWrite = 1'b0;
+                PCSource       = 2'b00;
+                AluControl     = 3'b000;
+                ALUOp          = 3'b000;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b00;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                EPCWrite       = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 1'b0;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                Div0           = 1'b0;
+                LT             = 1'b0;
+                GT             = 1'b0;
+                EG             = 1'b0;
+                Zero           = 1'b0;
+                OverfLow       = 1'b0;
+                MultOrDiv      = 1'b0;
+                cycle          = 3'b001; 
+            end
+            else if (cycle = 3'b001) begin
+                PCWriteCond    = 1'b0; 
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 1'b0;
+                SetSizeCtrl    = 1'b0;
+                ALUoutputWrite = 1'b0;
+                PCSource       = 2'b00;
+                AluControl     = 3'b000;
+                ALUOp          = 3'b000;
+                ALUSrcB        = 2'b00;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                EPCWrite       = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 1'b0;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                Div0           = 1'b0;
+                LT             = 1'b0;
+                GT             = 1'b0;
+                EG             = 1'b0;
+                Zero           = 1'b0;
+                OverfLow       = 1'b0;
+                MultOrDiv      = 1'b0;
+                cycle          = 3'b001; 
+                //escrevendo em pc
+                ALUSrcA        = 2'b11;
+                PCWrite        = 1'b1;
+                nextState <= stateCOMMON;
             end
         end
     end
