@@ -670,8 +670,6 @@ always @(negedge clk) begin
                     //Parte do j#
                     PCWrite        = 1'b1;
                     PCSource       = 2'b10;
-
-                    cycle          = 1'b'1;
                 end
                 3'b001: begin
                     currentState <= stateJUMP;
@@ -1022,9 +1020,81 @@ always @(negedge clk) begin
         end
 
 
-
+        //jal#
         stateJAL: begin
-            
+            case (cycle)
+                3'b000: begin
+                    PCWrite        = 1'b0;
+                    PCWriteCond    = 1'b0;
+                    IorD           = 2'b00;
+                    MemRead        = 1'b0;
+                    MemWrite       = 1'b0;
+                    MemToReg       = 3'b000;
+                    IRWrite        = 1'b0;
+                    HiWrite        = 1'b0;
+                    LoWrite        = 1'b0;
+                    Exception      = 1'b0;
+                    DetSizeCtrl    = 2'b00;
+                    SetSizeCtrl    = 2'b00;
+                    AluControl     = 3'b000;
+                    ALUOp          = 3'b000;
+                    ALUSrcB        = 2'b00;
+                    RegWrite       = 1'b0;
+                    RegDst         = 1'b0;
+                    EPCWrite       = 1'b0;
+                    ShiftControl   = 3'b000;
+                    ShiftAmt       = 2'b00;
+                    ShiftScr       = 1'b0;
+                    WriteA         = 1'b0;
+                    WriteB         = 1'b0;
+                    WriteAuxA      = 1'b0;
+                    MultOrDiv      = 1'b0;
+                    //Escrever pc+4 em aluout
+                    ALUSrcA        = 2'b00;
+                    PCSource       = 2'b01;
+                    ALUoutputWrite = 1'b1;
+                end
+                3'b001: begin
+                    PCWriteCond    = 1'b0;
+                    IorD           = 2'b00;
+                    MemRead        = 1'b0;
+                    MemWrite       = 1'b0;
+                    IRWrite        = 1'b0;
+                    HiWrite        = 1'b0;
+                    LoWrite        = 1'b0;
+                    Exception      = 1'b0;
+                    DetSizeCtrl    = 2'b00;
+                    SetSizeCtrl    = 2'b00;
+                    AluControl     = 3'b000;
+                    ALUOp          = 3'b000;
+                    ALUSrcA        = 2'b00;
+                    ALUSrcB        = 2'b00;
+                    EPCWrite       = 1'b0;
+                    ShiftControl   = 3'b000;
+                    ShiftAmt       = 2'b00;
+                    ShiftScr       = 1'b0;
+                    WriteA         = 1'b0;
+                    WriteB         = 1'b0;
+                    WriteAuxA      = 1'b0;
+                    MultOrDiv      = 1'b0;
+                    //jump e escrita no reg31
+                    PCSource       = 2'b10;
+                    ALUoutputWrite = 1'b1;
+                    PCWrite        = 1'b1;
+                    RegWrite       = 1'b1;
+                    MemToReg       = 3'b000;
+                    //Errado deve ir para o reg31 *************************************************************************************************************************
+                    RegDst         = 1'b0;
+
+                end
+                3'b010: begin
+                    
+                end
+                3'b011: begin
+                    
+                end
+                default: 
+            endcase
         end
 
         stateMAC: begin
