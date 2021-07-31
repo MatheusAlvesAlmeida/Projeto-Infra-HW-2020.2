@@ -22,7 +22,7 @@ module ctrl_unit (
     output reg [2:0]  ALUSrcB,
     output reg [1:0]  ALUSrcA,
     output reg        RegWrite,
-    output reg        RegDst,
+    output reg [1:0]  RegDst,
     output reg        EPCWrite,
     output reg [2:0]  ShiftControl,
     output reg [1:0]  ShiftAmt,
@@ -214,7 +214,7 @@ always @(negedge clk) begin
                     ALUSrcA        = 2'b01; // A
                     ALUSrcB        = 3'b000;// B
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -295,7 +295,7 @@ always @(negedge clk) begin
                     ALUSrcA        = 2'b01; // A
                     ALUSrcB        = 3'b000;// B
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -376,7 +376,7 @@ always @(negedge clk) begin
                     ALUSrcA        = 2'b01; // A
                     ALUSrcB        = 3'b000;// B
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -457,7 +457,7 @@ always @(negedge clk) begin
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -494,7 +494,7 @@ always @(negedge clk) begin
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -533,7 +533,7 @@ always @(negedge clk) begin
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -573,7 +573,7 @@ always @(negedge clk) begin
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -624,7 +624,7 @@ always @(negedge clk) begin
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -661,7 +661,7 @@ always @(negedge clk) begin
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -700,7 +700,7 @@ always @(negedge clk) begin
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -740,7 +740,7 @@ always @(negedge clk) begin
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -786,7 +786,7 @@ always @(negedge clk) begin
             ALUOp          = 3'b000;
             ALUSrcA        = 2'b00;
             ALUSrcB        = 2'b00;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             ShiftControl   = 3'b000;
             ShiftAmt       = 2'b00;
@@ -825,7 +825,7 @@ always @(negedge clk) begin
             ALUOp          = 3'b000;
             ALUSrcA        = 2'b00;
             ALUSrcB        = 2'b00;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             ShiftControl   = 3'b000;
             ShiftAmt       = 2'b00;
@@ -861,7 +861,7 @@ always @(negedge clk) begin
             ALUoutputWrite = 1'b0;
             MemToReg       = 3'b000;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             ShiftControl   = 3'b000;
             ShiftAmt       = 2'b00;
@@ -908,7 +908,7 @@ always @(negedge clk) begin
                     ALUSrcA        = 2'b00; // PC
                     ALUSrcB        = 3'b001;// 4
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -989,7 +989,7 @@ always @(negedge clk) begin
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 3'b000;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -1030,7 +1030,7 @@ always @(negedge clk) begin
             ALUSrcA        = 2'b00;
             ALUSrcB        = 2'b00;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             WriteA         = 1'b0;
             WriteB         = 1'b0;
@@ -1063,7 +1063,7 @@ always @(negedge clk) begin
             ALUSrcA        = 2'b00;
             ALUSrcB        = 2'b00;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             WriteA         = 1'b0;
             WriteB         = 1'b0;
@@ -1096,7 +1096,7 @@ always @(negedge clk) begin
             ALUSrcA        = 2'b00;
             ALUSrcB        = 2'b00;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             WriteA         = 1'b0;
             WriteB         = 1'b0;
@@ -1129,7 +1129,7 @@ always @(negedge clk) begin
             ALUSrcA        = 2'b00;
             ALUSrcB        = 2'b00;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             WriteA         = 1'b0;
             WriteB         = 1'b0;
@@ -1162,7 +1162,7 @@ always @(negedge clk) begin
             ALUSrcA        = 2'b00;
             ALUSrcB        = 2'b00;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             WriteA         = 1'b0;
             WriteB         = 1'b0;
@@ -1195,7 +1195,7 @@ always @(negedge clk) begin
             ALUSrcA        = 2'b00;
             ALUSrcB        = 2'b00;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             WriteA         = 1'b0;
             WriteB         = 1'b0;
@@ -1233,7 +1233,7 @@ always @(negedge clk) begin
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -1264,7 +1264,7 @@ always @(negedge clk) begin
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -1299,7 +1299,7 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUOp          = 3'b000;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -1331,7 +1331,7 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUoutputWrite = 1'b0;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -1378,7 +1378,7 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUOp          = 3'b000;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -1410,7 +1410,7 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUoutputWrite = 1'b0;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -1457,7 +1457,7 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUOp          = 3'b000;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -1490,7 +1490,7 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUoutputWrite = 1'b0;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -1537,7 +1537,7 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUOp          = 3'b000;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -1570,7 +1570,7 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUoutputWrite = 1'b0;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -1618,7 +1618,7 @@ always @(negedge clk) begin
                     ALUOp          = 3'b000;
                     ALUSrcB        = 2'b00;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -1661,7 +1661,7 @@ always @(negedge clk) begin
                     RegWrite       = 1'b1;
                     MemToReg       = 3'b000;
                     //Errado deve ir para o reg31 *************************************************************************************************************************
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
 
                 end
                 3'b010: begin
@@ -1689,7 +1689,7 @@ always @(negedge clk) begin
             DetSizeCtrl    = 2'b00;
             SetSizeCtrl    = 2'b00;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             ShiftControl   = 3'b000;
             ShiftAmt       = 2'b00;
@@ -1724,7 +1724,7 @@ always @(negedge clk) begin
             ALUSrcA        = 2'b00;
             ALUSrcB        = 2'b00;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             ShiftControl   = 3'b000;
             ShiftAmt       = 2'b00;
@@ -1788,7 +1788,7 @@ always @(negedge clk) begin
             ALUSrcA        = 2'b00;
             ALUSrcB        = 2'b00;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             WriteA         = 1'b0;
             WriteB         = 1'b0;
@@ -1821,7 +1821,7 @@ always @(negedge clk) begin
             ALUSrcA        = 2'b00;
             ALUSrcB        = 2'b00;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             ShiftControl   = 3'b000;
             ShiftAmt       = 2'b00;
@@ -1864,7 +1864,7 @@ always @(negedge clk) begin
             ALUSrcA        = 2'b00;
             ALUSrcB        = 2'b00;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             ShiftControl   = 3'b000;
             ShiftAmt       = 2'b00;
@@ -1915,7 +1915,7 @@ always @(negedge clk) begin
             WriteAuxA      = 1'b0;
             MultOrDiv      = 1'b0;
 
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             RegWrite       = 1'b1;
             MemToReg       = 3'b100;
 
@@ -1948,7 +1948,7 @@ always @(negedge clk) begin
             WriteAuxA      = 1'b0;
             MultOrDiv      = 1'b0;
 
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             RegWrite       = 1'b1;
             MemToReg       = 3'b001;
 
@@ -1972,7 +1972,7 @@ always @(negedge clk) begin
             ALUSrcA        = 2'b00;
             ALUSrcB        = 2'b00;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             ShiftControl   = 3'b000;
             ShiftAmt       = 2'b00;
@@ -2014,7 +2014,7 @@ always @(negedge clk) begin
             ALUSrcA        = 2'b00;
             ALUSrcB        = 2'b00;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             WriteA         = 1'b0;
             WriteB         = 1'b0;
@@ -2044,7 +2044,7 @@ always @(negedge clk) begin
             SetSizeCtrl    = 2'b00;
             ALUoutputWrite = 1'b0;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             ShiftControl   = 3'b000;
             ShiftAmt       = 2'b00;
@@ -2087,7 +2087,7 @@ always @(negedge clk) begin
             WriteAuxA      = 1'b0;
             MultOrDiv      = 1'b0;
 
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             RegWrite       = 1'b1;
             MemToReg       = 3'b101;
 
@@ -2112,7 +2112,7 @@ always @(negedge clk) begin
             PCSource       = 2'b00;
             ALUOp          = 3'b000;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             ShiftControl   = 3'b000;
             ShiftAmt       = 2'b00;
             ShiftScr       = 2'b00;
@@ -2159,7 +2159,7 @@ always @(negedge clk) begin
             ALUoutputWrite = 1'b0;
             PCSource       = 2'b00;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             ShiftControl   = 3'b000;
             ShiftAmt       = 2'b00;
             ShiftScr       = 2'b00;
@@ -2206,7 +2206,7 @@ always @(negedge clk) begin
             ALUoutputWrite = 1'b0;
             PCSource       = 2'b00;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             ShiftControl   = 3'b000;
             ShiftAmt       = 2'b00;
             ShiftScr       = 2'b00;
@@ -2259,7 +2259,7 @@ always @(negedge clk) begin
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -2295,7 +2295,7 @@ always @(negedge clk) begin
                     ALUOp          = 3'b000;
                     ALUSrcB        = 2'b00;
                     RegWrite       = 1'b0;
-                    RegDst         = 1'b0;
+                    RegDst         = 2'b00;
                     EPCWrite       = 1'b0;
                     ShiftControl   = 3'b000;
                     ShiftAmt       = 2'b00;
@@ -2342,7 +2342,7 @@ end
             ALUSrcA        = 2'b00;
             ALUSrcB        = 2'b00;
             RegWrite       = 1'b0;
-            RegDst         = 1'b0;
+            RegDst         = 2'b00;
             EPCWrite       = 1'b0;
             ShiftControl   = 3'b000;
             ShiftAmt       = 2'b00;
