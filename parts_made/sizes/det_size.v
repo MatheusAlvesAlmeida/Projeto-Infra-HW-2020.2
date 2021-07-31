@@ -1,7 +1,7 @@
 module det_size (
   input  wire [1:0] DetSizeCtrl,
   input  wire [31:0] data_in,
-  output wire [31:0] data_out,
+  output wire [31:0] data_out
 );
 
   wire [31:0] aux;

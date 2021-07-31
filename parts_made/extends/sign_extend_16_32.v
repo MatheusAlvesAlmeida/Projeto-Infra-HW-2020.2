@@ -3,6 +3,6 @@ module sign_extend_16_32 (
     output wire [31:0] data_out
 );
 
-    assign data_out = (data_in[15]) ?  {{16{1'b1}}, data_in} : {{16{1'b0}, data_in}};
+    assign data_out = (data_in[15]) ?  {{16{1'b1}}, data_in} : {{16{1'b0}}, data_in};
 
 endmodule

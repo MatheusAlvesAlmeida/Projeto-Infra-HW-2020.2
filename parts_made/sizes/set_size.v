@@ -2,7 +2,7 @@ module set_size (
   input  wire [1:0]  SetSizeCtrl,
   input  wire [31:0] data_in_0,  // MDR_out
   input  wire [31:0] data_in_1,  // B_out
-  output wire [31:0] data_out,
+  output wire [31:0] data_out
 );
   wire [31:0] aux;
 

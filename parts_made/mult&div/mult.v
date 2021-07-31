@@ -11,20 +11,22 @@ module mult (
 reg [63:0] add;
 reg [63:0] sub;
 reg [63:0] prod;
+integer i;
 
 always @(posedge clock) begin
-    if(reset = 1'b1) begin
+    if(reset == 1'b1) begin
         hi     = 32'b0;
-		lo     = 32'b0;
-		adicao = 64'b0;
-        adicao = 64'b0;
+        lo     = 32'b0;
+        add    = 64'b0;
+        sub    = 64'b0;
+        prod   = 64'b0;
     end
     else if (MultOrDiv == 0) begin
         add  = {A, 33'b0, 1'b0};
         sub  = {(~A + 1), 33'b0, 1'b0};
         prod = {32'b0, B, 1'b0};
     end
-    for (i = 0; i < 32; i++) begin
+    for (i = 0; i < 32; i = i + 1) begin
         if(prod[62] == 0 && prod[63] == 1) begin
             prod = prod + add;
         end
@@ -37,5 +39,4 @@ always @(posedge clock) begin
     lo = prod[32:1]; 
 end
 
-endmodule;
-
+endmodule
