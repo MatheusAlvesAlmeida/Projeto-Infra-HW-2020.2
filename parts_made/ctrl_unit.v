@@ -1037,9 +1037,9 @@ always @(negedge clk) begin
             WriteAuxA      = 1'b0;
             MultOrDiv      = 1'b0;
 
-            ShiftControl = 3'b010;
-            ShiftAmt = 2'b01;
-            ShiftScr = 2'b01;
+            ShiftControl   = 3'b010;
+            ShiftAmt       = 2'b01;
+            ShiftScr       = 2'b01;
 
             nextState = stateSRT;
         end
@@ -1070,9 +1070,9 @@ always @(negedge clk) begin
             WriteAuxA      = 1'b0;
             MultOrDiv      = 1'b0;
 
-            ShiftControl = 3'b100;
-            ShiftAmt = 2'b01;
-            ShiftScr = 2'b01;
+            ShiftControl   = 3'b100;
+            ShiftAmt       = 2'b01;
+            ShiftScr       = 2'b01;
 
             nextState = stateSRT;
         end
@@ -1103,9 +1103,9 @@ always @(negedge clk) begin
             WriteAuxA      = 1'b0;
             MultOrDiv      = 1'b0;
 
-            ShiftControl = 3'b011;
-            ShiftAmt = 2'b01;
-            ShiftScr = 2'b01;
+            ShiftControl   = 3'b011;
+            ShiftAmt       = 2'b01;
+            ShiftScr       = 2'b01;
 
             nextState = stateSRT;
         end
@@ -1136,9 +1136,9 @@ always @(negedge clk) begin
             WriteAuxA      = 1'b0;
             MultOrDiv      = 1'b0;
 
-            ShiftControl = 3'b010;
-            ShiftAmt = 2'b00;
-            ShiftScr = 2'b00;
+            ShiftControl   = 3'b010;
+            ShiftAmt       = 2'b00;
+            ShiftScr       = 2'b00;
 
             nextState = stateSRT;
         end
@@ -1169,9 +1169,9 @@ always @(negedge clk) begin
             WriteAuxA      = 1'b0;
             MultOrDiv      = 1'b0;
 
-            ShiftControl = 3'b100;
-            ShiftAmt = 2'b00;
-            ShiftScr = 2'b00;
+            ShiftControl   = 3'b100;
+            ShiftAmt       = 2'b00;
+            ShiftScr       = 2'b00;
 
             nextState = stateSRT;
         end
@@ -1202,9 +1202,9 @@ always @(negedge clk) begin
             WriteAuxA      = 1'b0;
             MultOrDiv      = 1'b0;
 
-            ShiftControl = 3'b000;
-            ShiftAmt = 2'b00;
-            ShiftScr = 2'b00;
+            ShiftControl   = 3'b000;
+            ShiftAmt       = 2'b00;
+            ShiftScr       = 2'b00;
 
             nextState = stateCOMMON;
         end
@@ -2127,7 +2127,7 @@ always @(negedge clk) begin
             OverfLow       = 1'b0;
             MultOrDiv      = 1'b0;
             //parte do overflow
-            ALUOp     = 3'b010;
+            ALUOp          = 3'b010;
             EPCWrite       = 1'b1;
             ALUSrcA        = 2'b00;
             ALUSrcB        = 2'b01;
