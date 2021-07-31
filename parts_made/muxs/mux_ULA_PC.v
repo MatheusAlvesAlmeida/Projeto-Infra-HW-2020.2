@@ -16,4 +16,4 @@ module mux_ULA_PC (
   
   assign result = PCSource[1] ? aux_2 : aux_1;
 
-endmodule 
+endmodule
