@@ -332,7 +332,7 @@ module cpu (
     );
     
     ula32 ULA_(
-        ALUOp, //criar o alu control
+        ALUOp,
         mux_A_ULA_output,
         mux_B_ULA_output,
         Overflow,
@@ -366,9 +366,7 @@ module cpu (
         ReadData1_output,
         ReadData2_output,
     );
-
-    //ALU CONTROL
-
+    
     ctrl_unit_(clk, reset, OPCODE, Overflow, Zero, LT, GT, EG, Div0, IRWrite, RegDst, RegWrite, WriteA, WriteB,  ALUSrcA, ALUSrcB, ALUOp, EPCWrite, PCSource, PCWrite, MemToReg, PCWriteCond, IorD, MemRead, MemWrite, MultOrDiv, HiWrite, LoWrite, Exception, DetSizeCtrl, SetSizeCtrl, MemoryDataWrite, AluOPWrite, ALUOp, RegDst, ShiftControl, ShiftAmt, ShiftSrc, WriteAuxA);
 
 endmodule

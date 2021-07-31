@@ -1,3 +1,4 @@
+//REVISAR CODIGO E TIRAR O ALUCONTROL E DEIXAR SO O ALUOP
 module ctrl_unit (
     input  wire       clk,
     input  wire       reset,
@@ -192,7 +193,6 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUoutputWrite = 1'b0;
                     PCSource       = 2'b00;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
@@ -230,7 +230,6 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUoutputWrite = 1'b0;
                     PCSource       = 2'b00;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
@@ -270,7 +269,6 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUoutputWrite = 1'b0;
                     PCSource       = 2'b00;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
@@ -311,7 +309,6 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUoutputWrite = 1'b0;
                     PCSource       = 2'b00;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
@@ -362,7 +359,6 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUoutputWrite = 1'b0;
                     PCSource       = 2'b00;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
@@ -400,7 +396,6 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUoutputWrite = 1'b0;
                     PCSource       = 2'b00;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
@@ -440,7 +435,6 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUoutputWrite = 1'b0;
                     PCSource       = 2'b00;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
@@ -481,7 +475,6 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUoutputWrite = 1'b0;
                     PCSource       = 2'b00;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
@@ -653,7 +646,6 @@ always @(negedge clk) begin
                     DetSizeCtrl    = 2'b00;
                     SetSizeCtrl    = 2'b00;
                     ALUoutputWrite = 1'b0;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
@@ -685,7 +677,6 @@ always @(negedge clk) begin
                     DetSizeCtrl    = 2'b00;
                     SetSizeCtrl    = 2'b00;
                     ALUoutputWrite = 1'b0;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
@@ -722,7 +713,6 @@ always @(negedge clk) begin
                     Exception      = 1'b0;
                     DetSizeCtrl    = 2'b00;
                     SetSizeCtrl    = 2'b00;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     RegWrite       = 1'b0;
                     RegDst         = 1'b0;
@@ -801,7 +791,6 @@ always @(negedge clk) begin
                     Exception      = 1'b0;
                     DetSizeCtrl    = 2'b00;
                     SetSizeCtrl    = 2'b00;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     RegWrite       = 1'b0;
                     RegDst         = 1'b0;
@@ -879,7 +868,6 @@ always @(negedge clk) begin
                     Exception      = 1'b0;
                     DetSizeCtrl    = 2'b00;
                     SetSizeCtrl    = 2'b00;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     RegWrite       = 1'b0;
                     RegDst         = 1'b0;
@@ -957,7 +945,6 @@ always @(negedge clk) begin
                     Exception      = 1'b0;
                     DetSizeCtrl    = 2'b00;
                     SetSizeCtrl    = 2'b00;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     RegWrite       = 1'b0;
                     RegDst         = 1'b0;
@@ -1036,7 +1023,6 @@ always @(negedge clk) begin
                     Exception      = 1'b0;
                     DetSizeCtrl    = 2'b00;
                     SetSizeCtrl    = 2'b00;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     ALUSrcB        = 2'b00;
                     RegWrite       = 1'b0;
@@ -1065,7 +1051,6 @@ always @(negedge clk) begin
                     Exception      = 1'b0;
                     DetSizeCtrl    = 2'b00;
                     SetSizeCtrl    = 2'b00;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
@@ -1479,7 +1464,6 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUoutputWrite = 1'b0;
                     PCSource       = 2'b00;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     ALUSrcA        = 2'b00;
                     ALUSrcB        = 2'b00;
@@ -1517,7 +1501,6 @@ always @(negedge clk) begin
                     SetSizeCtrl    = 2'b00;
                     ALUoutputWrite = 1'b0;
                     PCSource       = 2'b00;
-                    AluControl     = 3'b000;
                     ALUOp          = 3'b000;
                     ALUSrcB        = 2'b00;
                     RegWrite       = 1'b0;
