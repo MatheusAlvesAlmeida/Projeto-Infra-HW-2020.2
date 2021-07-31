@@ -3,7 +3,7 @@ module mux_IR_REGISTERS (
   input  wire [31:0] input_1,
   input  wire [31:0] input_2,
   
-  output wire [31:0] result,
+  output wire [31:0] result
 );
 
   wire [31:0] aux_1;

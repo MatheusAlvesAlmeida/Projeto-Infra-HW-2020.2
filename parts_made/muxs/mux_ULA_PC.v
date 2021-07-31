@@ -5,7 +5,7 @@ module mux_ULA_PC (
   input  wire [31:0] input_3,
   input  wire [31:0] input_4,
 
-  output wire [31:0] result,
+  output wire [31:0] result
 );
 
   wire [31:0] aux_1;

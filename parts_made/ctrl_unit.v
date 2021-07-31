@@ -3,39 +3,39 @@ module ctrl_unit (
     input  wire       clk,
     input  wire       reset,
     input  wire       OPCODE,
-    output reg        PCWriteCond;
-    output reg        PCWrite;     
-    output reg [1:0]  IorD;        
-    output reg        MemRead;         
-    output reg        MemWrite;        
-    output reg [2:0]  MemToReg;        
-    output reg        IRWrite;     
-    output reg        MultOrDiv;       
-    output reg        HIWrite;     
-    output reg        LOWrite;     
-    output reg [1:0]  Exception;       
-    output reg [1:0]  DetSizeCtrl;     
-    output reg [1:0]  SetSizeCtrl; 
-    output reg        ALUoutputWrite;  
-    output reg [1:0]  PCSource;        
-    output reg [2:0]  ALUOp;       
-    output reg [2:0]  ALUSrcB;     
-    output reg [1:0]  ALUSrcA;     
-    output reg        RegWrite;        
-    output reg [1:0]  RegDst;          
-    output reg        EPCWrite;        
-    output reg [2:0]  ShiftControl;        
-    output reg [1:0]  ShiftAmt;        
-    output reg        ShiftSrc;        
-    output reg        WriteA;      
-    output reg        WriteB;      
-    output reg        WriteAuxA;       
-    input  wire       Div0;        
-    input  wire       LT;              
-    input  wire       GT;              
-    input  wire       EG;              
-    input  wire       Zero;            
-    input  wire       OverfLow;
+    output reg        PCWriteCond,
+    output reg        PCWrite,     
+    output reg [1:0]  IorD,        
+    output reg        MemRead,         
+    output reg        MemWrite,        
+    output reg [2:0]  MemToReg,        
+    output reg        IRWrite,     
+    output reg        MultOrDiv,       
+    output reg        HIWrite,     
+    output reg        LOWrite,     
+    output reg [1:0]  Exception,       
+    output reg [1:0]  DetSizeCtrl,     
+    output reg [1:0]  SetSizeCtrl, 
+    output reg        ALUoutputWrite,  
+    output reg [1:0]  PCSource,        
+    output reg [2:0]  ALUOp,       
+    output reg [2:0]  ALUSrcB,     
+    output reg [1:0]  ALUSrcA,     
+    output reg        RegWrite,        
+    output reg [1:0]  RegDst,          
+    output reg        EPCWrite,        
+    output reg [2:0]  ShiftControl,        
+    output reg [1:0]  ShiftAmt,        
+    output reg        ShiftSrc,        
+    output reg        WriteA,      
+    output reg        WriteB,      
+    output reg        WriteAuxA,       
+    input  wire       Div0,        
+    input  wire       LT,              
+    input  wire       GT,              
+    input  wire       EG,              
+    input  wire       Zero,            
+    input  wire       OverfLow
 );
 
 // Controladores do estado atual

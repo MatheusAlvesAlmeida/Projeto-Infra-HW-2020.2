@@ -5,7 +5,7 @@ module mult (
     input  signed [31:0] A,
     input  signed [31:0] B,
     output reg    [31:0] hi, 
-    output reg    [31:0] lo,
+    output reg    [31:0] lo
 );
 
 reg [63:0] add;

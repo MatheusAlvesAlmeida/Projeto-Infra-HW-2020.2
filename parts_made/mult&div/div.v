@@ -6,7 +6,7 @@ module div (
     input  signed [31:0] B,
     output reg    [31:0] hi, 
     output reg    [31:0] lo,
-    output reg           Div0,
+    output reg           Div0
 );
 
 reg dividend;

@@ -1,6 +1,6 @@
 module cpu (
     input wire clk,
-    input wire reset,
+    input wire reset
 );
     // control wires
     wire       PCWriteCond;
@@ -117,7 +117,7 @@ module cpu (
         reset,
         PCWrite,
         PC_input,
-        PC_output,
+        PC_output
     );
 
     Memoria MEM_(
@@ -126,7 +126,7 @@ module cpu (
         MemRead,
         mux_PC_MEMORY_out,
         SetSize_output,
-        Memory_output,
+        Memory_output
     );
 
     Inst_Reg IR_(
@@ -137,7 +137,7 @@ module cpu (
         OPCODE,
         RS,
         RT,
-        OFFSET,
+        OFFSET
     );
 
     set_size SetSize_(
@@ -191,13 +191,13 @@ module cpu (
     Registrador HI_(
         HIWrite,
         mux_HI_output,
-        HI_output,
+        HI_output
     );
 
     Registrador LO_(
         LOWrite,
         mux_LO_output,
-        LO_output,
+        LO_output
     );
 
     Registrador A_(
@@ -223,7 +223,7 @@ module cpu (
         PC_output,
         A_output,
         aux_A_output,
-        mux_A_ULA_output,
+        mux_A_ULA_output
     );
 
     mux_B_ULA muxB_(
@@ -232,7 +232,7 @@ module cpu (
         SignExtend_16_32_output,
         ShifLeft_2_down_output,
         MemoryDataRegister_output,
-        mux_B_ULA_output,
+        mux_B_ULA_output
     );
 
     mux_EXCEPTIONS muxExceptions_(
@@ -244,21 +244,21 @@ module cpu (
         MultOrDiv,
         mult_output_HI,
         div_output_HI,
-        mux_HI_output,
+        mux_HI_output
     );
 
     mux_IR_REGISTERS muxIrReg_(
         RegDst,
         inst16_20,
         inst0_15,
-        mux_IR_REGISTERS_output,
+        mux_IR_REGISTERS_output
     );
 
     mux_LO muxLO_(
         MultOrDiv,
         mult_output_LO,
         div_output_LO,
-        mux_LO_output,
+        mux_LO_output
     );
 
     mux_MEMORY_REGISTERS muxMemReg_(
@@ -270,7 +270,7 @@ module cpu (
         ShifReg_output,
         SignExtend_1_32_output,
         ShiftLeft_16_32_output,
-        mux_MEMORY_REGISTERS_output,
+        mux_MEMORY_REGISTERS_output
     );
 
     mux_PC_MEMORY muxPCMemory_(
@@ -278,7 +278,7 @@ module cpu (
         PC_output,
         ALUOut_output,
         mux_EXCEPTIONS_output,
-        mux_PC_MEMORY_output,
+        mux_PC_MEMORY_output
     );
 
     mux_SHIFT_AMT muxShiftAmt_(
@@ -286,14 +286,14 @@ module cpu (
         B_output,
         inst_6_10,
         MemoryDataRegister_output,
-        mux_SHIFT_AMT_output,
+        mux_SHIFT_AMT_output
     );
 
     mux_SHIFT_SRC muxShiftSrc_(
         ShiftSrc,
         A_output,
         B_output,
-        mux_SHIFT_SRC_output,
+        mux_SHIFT_SRC_output
     );
 
     mux_ULA_PC muxULAPC_(
@@ -302,33 +302,33 @@ module cpu (
         ALUOut_output,
         concatenar_output,
         ALUResult,
-        PC_input,
+        PC_input
     );
 
     RegDesloc regDesloc_(
         ShiftControl,
         mux_SHIFT_SRC_output,
         mux_SHIFT_AMT_output,
-        ShifReg_output,
+        ShifReg_output
     );
 
     Registrador ALUOut_(
         ALUOutWrite,
         ALUResult,
-        ALUOut_output,
+        ALUOut_output
     );
 
     concatenate concatenar_(
         doConcatenate,
         ShifLeft_2_up_output,
         PC_output,
-        concatenar_output,
+        concatenar_output
     );
 
     Registrador EPC_(
         EPCWrite,
         PC_output,
-        EPC_output,
+        EPC_output
     );
     
     ula32 ULA_(
@@ -339,22 +339,22 @@ module cpu (
         LT,
         GT,
         Zero,
-        ALUResult,
+        ALUResult
     );
 
     shift_left_2_up shiftLeft2Up_(
         instructions,
-        ShifLeft_2_up_output,
+        ShifLeft_2_up_output
     );
 
     shift_left_2_down shiftLeft2Down_(
         SignExtend_16_32_output,
-        ShifLeft_2_down_output,
+        ShifLeft_2_down_output
     );
 
     signExtend_16_32 signExtend16_32_(
         inst_6_10,
-        SignExtend_16_32_output,
+        SignExtend_16_32_output
     );
 
     Banco_reg Registers_(
@@ -364,7 +364,7 @@ module cpu (
         mux_IR_REGISTERS_output,
         mux_MEMORY_REGISTERS_output,
         ReadData1_output,
-        ReadData2_output,
+        ReadData2_output
     );
     
     ctrl_unit_(clk, reset, OPCODE, Overflow, Zero, LT, GT, EG, Div0, IRWrite, RegDst, RegWrite, WriteA, WriteB,  ALUSrcA, ALUSrcB, ALUOp, EPCWrite, PCSource, PCWrite, MemToReg, PCWriteCond, IorD, MemRead, MemWrite, MultOrDiv, HiWrite, LoWrite, Exception, DetSizeCtrl, SetSizeCtrl, MemoryDataWrite, AluOPWrite, ALUOp, RegDst, ShiftControl, ShiftAmt, ShiftSrc, WriteAuxA);

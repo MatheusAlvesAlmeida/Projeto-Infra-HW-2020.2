@@ -1,6 +1,6 @@
 module shift_left_2_down (
   input  wire [31:0] data_in,
-  output wire [31:0] data_out,
+  output wire [31:0] data_out
 );
 
   wire [27:0] aux;

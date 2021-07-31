@@ -4,7 +4,7 @@ module mux_SHIFT_AMT (
   input  wire [31:0] input_2,
   input  wire [31:0] input_3,
 
-  output wire [4:0] result,
+  output wire [4:0] result
 );
 
   wire [31:0] aux_1;

@@ -8,7 +8,7 @@ module mux_MEMORY_REGISTERS (
   input  wire [31:0] input_6,
   input  wire [31:0] input_7,
 
-  output wire [31:0] result,
+  output wire [31:0] result
 );
 
   wire [31:0] aux_1;
