@@ -99,7 +99,6 @@ module cpu (
     wire [31:0] B_output;
     //ULA
     wire [31:0] ALUResult;
-    wire        LT;
     //ALU OUT
     wire [31:0] ALUOut_output;
     //SHIF REG
