@@ -28,7 +28,8 @@ module ctrl_unit (
     output reg [2:0]  ShiftSrc,        
     output reg        WriteA,      
     output reg        WriteB,      
-    output reg        WriteAuxA,       
+    output reg        WriteAuxA,
+    output reg        reset_out,
     input  wire       Div0,        
     input  wire       LT,              
     input  wire       GT,              
@@ -154,7 +155,7 @@ end
 always @(negedge clk) begin
     if(reset) begin
         currentState <= stateRESET;
-        reset = 1'b0;
+        reset_out = 1'b0;
     end
     else begin
         case (currentState)
@@ -678,7 +679,6 @@ always @(negedge clk) begin
 
                         cycle = 3'b000;
                         if (Div0) begin
-                            Div0      = 1'b1;
                             nextState = exceptionDiv0;
                         end
                         else begin
