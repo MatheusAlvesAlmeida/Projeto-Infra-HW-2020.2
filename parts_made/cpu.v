@@ -23,7 +23,7 @@ module cpu (
     wire [2:0] ALUSrcB;
     wire [1:0] ALUSrcA;
     wire       RegWrite;
-    wire       RegDst;
+    wire [1:0] RegDst;
     wire       EPCWrite;
     wire [1:0] ShiftControl;
     wire [1:0] ShiftAmt;
@@ -332,7 +332,7 @@ module cpu (
     );
     
     ula32 ULA_(
-        ALUOp, //criar o alu control
+        ALUOp,
         mux_A_ULA_output,
         mux_B_ULA_output,
         Overflow,
@@ -342,19 +342,14 @@ module cpu (
         ALUResult,
     );
 
-    shift_left_2 shiftLeft2Up_(
+    shift_left_2_up shiftLeft2Up_(
         instructions,
         ShifLeft_2_up_output,
     );
 
-    shift_left_2 shiftLeft2Down_(
+    shift_left_2_down shiftLeft2Down_(
         SignExtend_16_32_output,
         ShifLeft_2_down_output,
-    );
-
-    shift_left_16 shiftLeft16_32_(
-        inst_6_10,
-        ShiftLeft_16_32_output,
     );
 
     signExtend_16_32 signExtend16_32_(
@@ -371,9 +366,7 @@ module cpu (
         ReadData1_output,
         ReadData2_output,
     );
-
-    //ALU CONTROL
-
+    
     ctrl_unit_(clk, reset, OPCODE, Overflow, Zero, LT, GT, EG, Div0, IRWrite, RegDst, RegWrite, WriteA, WriteB,  ALUSrcA, ALUSrcB, ALUOp, EPCWrite, PCSource, PCWrite, MemToReg, PCWriteCond, IorD, MemRead, MemWrite, MultOrDiv, HiWrite, LoWrite, Exception, DetSizeCtrl, SetSizeCtrl, MemoryDataWrite, AluOPWrite, ALUOp, RegDst, ShiftControl, ShiftAmt, ShiftSrc, WriteAuxA);
 
 endmodule
