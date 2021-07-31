@@ -23,7 +23,7 @@ module cpu (
     wire [2:0] ALUSrcB;
     wire [1:0] ALUSrcA;
     wire       RegWrite;
-    wire       RegDst;
+    wire [1:0] RegDst;
     wire       EPCWrite;
     wire [1:0] ShiftControl;
     wire [1:0] ShiftAmt;
