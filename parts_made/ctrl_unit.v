@@ -437,12 +437,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         
                         cycle          = cycle + 1;
@@ -473,12 +467,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         HIWrite        = 1'b0;
                         LOWrite        = 1'b0;
@@ -518,12 +506,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         
                         cycle          = cycle + 1;
@@ -554,12 +536,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         HIWrite        = 1'b0;
                         LOWrite        = 1'b0;
@@ -599,12 +575,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         //parte do div
                         MultOrDiv      = 1'b1;
                         cycle          = cycle + 1;
@@ -635,12 +605,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         //parte do div
                         MultOrDiv      = 1'b1;
                         HIWrite        = 1'b1;
@@ -674,17 +638,10 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         //parte do div
                         MultOrDiv      = 1'b1;
                         HIWrite        = 1'b1;
                         LOWrite        = 1'b1;
-                        Div0      = 1'b0;
                         
                         cycle          = cycle + 1;
                         nextState      = currentState;
@@ -714,12 +671,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         //parte do div
                         MultOrDiv      = 1'b0;
                         HIWrite        = 1'b0;
@@ -766,12 +717,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         //parte do mult
                         MultOrDiv      = 1'b0;
                         cycle          = cycle + 1;
@@ -803,12 +748,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         //parte do mult
                         MultOrDiv      = 1'b0;
                         HIWrite        = 1'b1;
@@ -842,17 +781,10 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         //parte do mult
                         MultOrDiv      = 1'b0;
                         HIWrite        = 1'b1;
                         LOWrite        = 1'b1;
-                        OverfLow       = 1'b1;
                         cycle          = cycle + 1;
 
                         nextState = currentState;
@@ -882,12 +814,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         //parte do mult
                         MultOrDiv      = 1'b0;
                         HIWrite        = 1'b0;
@@ -925,12 +851,6 @@ always @(negedge clk) begin
                 WriteA         = 1'b0;
                 WriteB         = 1'b0;
                 WriteAuxA      = 1'b0;
-                Div0           = 1'b0;
-                LT             = 1'b0;
-                GT             = 1'b0;
-                EG             = 1'b0;
-                Zero           = 1'b0;
-                OverfLow       = 1'b0;
                 MultOrDiv      = 1'b0;
                 //parte do jr
                 ALUSrcA        = 2'b01;
@@ -968,12 +888,6 @@ always @(negedge clk) begin
                 WriteA         = 1'b0;
                 WriteB         = 1'b0;
                 WriteAuxA      = 1'b0;
-                Div0           = 1'b0;
-                LT             = 1'b0;
-                GT             = 1'b0;
-                EG             = 1'b0;
-                Zero           = 1'b0;
-                OverfLow       = 1'b0;
                 MultOrDiv      = 1'b0;
                 //parte do mfhi
                 MemToReg       = 3'b010;
@@ -1007,12 +921,6 @@ always @(negedge clk) begin
                 WriteA         = 1'b0;
                 WriteB         = 1'b0;
                 WriteAuxA      = 1'b0;
-                Div0           = 1'b0;
-                LT             = 1'b0;
-                GT             = 1'b0;
-                EG             = 1'b0;
-                Zero           = 1'b0;
-                OverfLow       = 1'b0;
                 MultOrDiv      = 1'b0;
                 //parte do mflo
                 MemToReg       = 3'b011;
@@ -1046,12 +954,6 @@ always @(negedge clk) begin
                 WriteA         = 1'b1;
                 WriteB         = 1'b1;
                 WriteAuxA      = 1'b0;
-                Div0           = 1'b0;
-                LT             = 1'b0;
-                GT             = 1'b0;
-                EG             = 1'b0;
-                Zero           = 1'b0;
-                OverfLow       = 1'b0;            
 
                 ShiftControl   = 3'b010;
                 ShiftAmt       = 2'b01;
@@ -1085,12 +987,6 @@ always @(negedge clk) begin
                 WriteA         = 1'b1;
                 WriteB         = 1'b1;
                 WriteAuxA      = 1'b0;
-                Div0           = 1'b0;
-                LT             = 1'b0;
-                GT             = 1'b0;
-                EG             = 1'b0;
-                Zero           = 1'b0;
-                OverfLow       = 1'b0;
 
                 ShiftControl   = 3'b010;
                 ShiftAmt       = 2'b00;
@@ -1124,12 +1020,6 @@ always @(negedge clk) begin
                 WriteA         = 1'b1;
                 WriteB         = 1'b1;
                 WriteAuxA      = 1'b0;
-                Div0           = 1'b0;
-                LT             = 1'b0;
-                GT             = 1'b0;
-                EG             = 1'b0;
-                Zero           = 1'b0;
-                OverfLow       = 1'b0;
 
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
@@ -1163,12 +1053,6 @@ always @(negedge clk) begin
                 WriteA         = 1'b1;
                 WriteB         = 1'b1;
                 WriteAuxA      = 1'b0;
-                Div0           = 1'b0;
-                LT             = 1'b0;
-                GT             = 1'b0;
-                EG             = 1'b0;
-                Zero           = 1'b0;
-                OverfLow       = 1'b0;
 
                 ShiftControl   = 3'b100;
                 ShiftAmt       = 2'b01;
@@ -1235,12 +1119,6 @@ always @(negedge clk) begin
                 WriteA         = 1'b1;
                 WriteB         = 1'b1;
                 WriteAuxA      = 1'b0;
-                Div0           = 1'b0;
-                LT             = 1'b0;
-                GT             = 1'b0;
-                EG             = 1'b0;
-                Zero           = 1'b0;
-                OverfLow       = 1'b0;
 
                 ShiftControl   = 3'b011;
                 ShiftAmt       = 2'b01;
@@ -1278,12 +1156,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         
                         cycle          = cycle + 1;
@@ -1314,12 +1186,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         HIWrite        = 1'b0;
                         LOWrite        = 1'b0;
@@ -1359,12 +1225,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         
                         cycle          = cycle + 1;
@@ -1395,12 +1255,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         HIWrite        = 1'b0;
                         LOWrite        = 1'b0;
@@ -1440,12 +1294,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
 
                         cycle          = 3'b000;
@@ -1480,12 +1328,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         //parte do addm
                         ALUSrcA        = 2'b01;
@@ -1516,12 +1358,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         //parte do addm
                         ALUSrcA        = 2'b00;
@@ -1556,12 +1392,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         //parte do addm
                         ALUSrcA        = 2'b00;
@@ -1592,12 +1422,6 @@ always @(negedge clk) begin
                         ShiftSrc       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         //parte do addm
                         ALUSrcA        = 2'b00;
@@ -1628,12 +1452,6 @@ always @(negedge clk) begin
                         ShiftSrc       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         //parte do addm
                         ALUSrcA        = 2'b00;
@@ -1665,12 +1483,6 @@ always @(negedge clk) begin
                         ShiftSrc       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         //parte do addm
                         ALUSrcA        = 2'b10;
@@ -1717,12 +1529,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         ALUoutputWrite = 1'b1; //escrever no aluout
 
@@ -1754,12 +1560,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         ALUoutputWrite = 1'b1;
 
@@ -1797,12 +1597,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         ALUoutputWrite = 1'b1;
 
@@ -1839,12 +1633,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         ALUoutputWrite = 1'b1; //escrever no aluout
 
@@ -1876,12 +1664,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         ALUoutputWrite = 1'b1;
 
@@ -1913,12 +1695,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         ALUoutputWrite = 1'b1;
 
@@ -2819,12 +2595,6 @@ always @(negedge clk) begin
                 WriteA         = 1'b0;
                 WriteB         = 1'b0;
                 WriteAuxA      = 1'b0;
-                Div0           = 1'b0;
-                LT             = 1'b0;
-                GT             = 1'b0;
-                EG             = 1'b0;
-                Zero           = 1'b0;
-                OverfLow       = 1'b0;
                 MultOrDiv      = 1'b0;
                 //parte do overflow
                 ALUOp          = 3'b010;
@@ -2866,12 +2636,6 @@ always @(negedge clk) begin
                 WriteA         = 1'b0;
                 WriteB         = 1'b0;
                 WriteAuxA      = 1'b0;
-                Div0           = 1'b0;
-                LT             = 1'b0;
-                GT             = 1'b0;
-                EG             = 1'b0;
-                Zero           = 1'b0;
-                OverfLow       = 1'b0;
                 MultOrDiv      = 1'b0;
                 //parte do opcode n x
                 ALUOp          = 3'b010;
@@ -2913,12 +2677,6 @@ always @(negedge clk) begin
                 WriteA         = 1'b0;
                 WriteB         = 1'b0;
                 WriteAuxA      = 1'b0;
-                Div0           = 1'b0;
-                LT             = 1'b0;
-                GT             = 1'b0;
-                EG             = 1'b0;
-                Zero           = 1'b0;
-                OverfLow       = 1'b0;
                 MultOrDiv      = 1'b0;
                 //parte do Div0
                 cycle          = 3'b001;
@@ -2967,12 +2725,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
 
                         cycle          = cycle + 1; 
@@ -3003,12 +2755,6 @@ always @(negedge clk) begin
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
-                        Div0           = 1'b0;
-                        LT             = 1'b0;
-                        GT             = 1'b0;
-                        EG             = 1'b0;
-                        Zero           = 1'b0;
-                        OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
                         //escrevendo em pc
                         ALUSrcA        = 2'b11;
