@@ -4,45 +4,45 @@ module ctrl_unit (
     input  wire       reset,
     input  wire       OPCODE,
     output reg        PCWriteCond,
-    output reg        PCWrite,     
-    output reg [1:0]  IorD,        
-    output reg        MemRead,         
-    output reg        MemWrite,        
-    output reg [2:0]  MemToReg,        
-    output reg        IRWrite,     
-    output reg        MultOrDiv,       
-    output reg        HIWrite,     
-    output reg        LOWrite,     
-    output reg [1:0]  Exception,       
-    output reg [1:0]  DetSizeCtrl,     
-    output reg [1:0]  SetSizeCtrl, 
-    output reg        ALUoutputWrite,  
-    output reg [1:0]  PCSource,        
-    output reg [2:0]  ALUOp,       
-    output reg [2:0]  ALUSrcB,     
+    output reg        PCWrite, 
+    output reg [1:0]  IorD,     
+    output reg        MemRead,
+    output reg        MemWrite,
+    output reg [2:0]  MemToReg,
+    output reg        IRWrite,
+    output reg        MultOrDiv,
+    output reg        HIWrite,
+    output reg        LOWrite,
+    output reg [1:0]  Exception,
+    output reg [1:0]  DetSizeCtrl,
+    output reg [1:0]  SetSizeCtrl,
+    output reg        ALUoutputWrite,
+    output reg [1:0]  PCSource,
+    output reg [2:0]  ALUOp,
+    output reg [2:0]  ALUSrcB,
     output reg [1:0]  ALUSrcA,     
     output reg        RegWrite,        
     output reg [1:0]  RegDst,          
     output reg        EPCWrite,        
     output reg [2:0]  ShiftControl,        
     output reg [1:0]  ShiftAmt,        
-    output reg        ShiftSrc,        
+    output reg [2:0]  ShiftSrc,        
     output reg        WriteA,      
     output reg        WriteB,      
     output reg        WriteAuxA,       
     input  wire       Div0,        
     input  wire       LT,              
     input  wire       GT,              
-    input  wire       EG,              
-    input  wire       Zero,            
-    input  wire       OverfLow
+    input  wire       EG,            
+    input  wire       Zero,         
+    input  wire       OverfLow,
+    input  wire [5:0] Funct
 );
 
 // Controladores do estado atual
 reg  [5:0] currentState;
 reg  [5:0] nextState;
 reg  [2:0] cycle;
-wire [5:0] auxOffset = offset;
 
 // Todos estados
 parameter stateRESET    = 6'd0;
@@ -90,6 +90,14 @@ parameter stateLRT      = 6'd41;
 parameter stateLTRT     = 6'd42;
 parameter stateLOAD     = 6'd43;
 parameter stateSTORE    = 6'd44;
+parameter statePCW      = 6'd45;
+parameter stateRW       = 6'd46;
+
+//Exceções
+parameter exceptionOPCODE    = 6'd47;
+parameter exceptionOverflow  = 6'd48;
+parameter exceptionDivByZero = 6'd49;
+parameter waitAndPCwrite     = 6'd50;
 
 // Opcodes
 parameter opcodeR     = 6'b000000;
@@ -111,11 +119,24 @@ parameter opcodeSW    = 6'b101011;
 parameter opcodeJ     = 6'b000010;
 parameter opcodeJAL   = 6'b000011;
 
-//Exceções
-parameter exceptionOPCODE    = 7'd253;
-parameter exceptionOverflow  = 7'd254;
-parameter exceptionDivByZero = 7'd255;
-parameter waitAndPCwrite     = 6'd35;
+// Functs
+parameter functADD   = 6'b100000;
+parameter functAND   = 6'b100100;
+parameter functDIV   = 6'b011010;
+parameter functMULT  = 6'b011000;
+parameter functJR    = 6'b001000;
+parameter functMFHI  = 6'b010000;
+parameter functMFLO  = 6'b010010;
+parameter functSLL   = 6'b000000;
+parameter functSLLV  = 6'b000100;
+parameter functSLT   = 6'b101010;
+parameter functSRA   = 6'b000011;
+parameter functSRAV  = 6'b000111;
+parameter functSRL   = 6'b000010;
+parameter functSUB   = 6'b100010;
+parameter functBREAK = 6'b001101;
+parameter functRTE   = 6'b010011;
+parameter functADDM  = 6'b000101;
 
 initial begin
     nextState <= stateRESET;
@@ -141,131 +162,253 @@ always @(negedge clk) begin
 
                 nextState <= stateDECODE;
             end
-            // stateCOMMON: begin
-                
-            // end
-            stateDECODE: begin
+
+            // ESTADO COMUNS
+            stateCOMMON: begin
+                PCWrite        = 1'b0;
+                PCWriteCond    = 1'b0;
+                IorD           = 2'b00;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 2'b00;
+                SetSizeCtrl    = 2'b00;
+                ALUoutputWrite = 1'b0;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 2'b00;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                MultOrDiv      = 1'b0;
+
+                MemRead        = 1'b1;
+                ALUSrcA        = 2'b01;
+                ALUSrcB        = 3'b001;
+                PCSource       = 2'b11;
+                ALUOp          = 3'b001;
+                EPCWrite       = 1'b1;
+
+                if (cycle == 3'b010) begin
+                    cycle = 3'b000;
+                    nextState = currentState;
+                end
+                else begin
+                    cycle = cycle + 1;
+                    nextState = statePCW;
+                end
+            end
+
+            statePCW: begin
+                PCSource       = 2'b00;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 2'b00;
+                SetSizeCtrl    = 2'b00;
+                ALUoutputWrite = 1'b0;
+                ALUOp          = 3'b000;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 3'b000;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                EPCWrite       = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 2'b00;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                MultOrDiv      = 1'b0;
+
+                PCWriteCond    = 1'b1;
+                PCWrite        = 1'b1;
+
+                nextState = stateRW;
+            end
+
+            stateRW: begin
+                PCWrite        = 1'b0;
+                PCWriteCond    = 1'b0;
+                PCSource       = 2'b00;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 2'b00;
+                SetSizeCtrl    = 2'b00;
+                ALUoutputWrite = 1'b0;
+                ALUOp          = 3'b000;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 3'b000;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                EPCWrite       = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 2'b00;
+                WriteAuxA      = 1'b0;
+                MultOrDiv      = 1'b0;
+
+                IRWrite        = 1'b1;
+                WriteA         = 1'b1;
+                WriteB         = 1'b1;
+
                 case (OPCODE)
                     opcodeR: begin
-                        case (auxOffset)
-                            ADD: begin
-                                currentState = stateADD;
+                        case (Funct)
+                            functADD: begin
+                                nextState = stateADD;    
                             end
-                            AND: begin
-                                currentState = stateAND;
+
+                            functAND: begin
+                                nextState = stateAND;
                             end
-                            DIV: begin
-                                currentState = stateDIV;
+
+                            functDIV: begin
+                                nextState = stateDIV;
                             end
-                            MULT: begin
-                                currentState = stateMULT;
+
+                            functMULT: begin
+                                nextState = stateMULT;
                             end
-                            JR: begin
-                                currentState = stateJR;
+
+                            functJR: begin
+                                nextState = stateJR;
                             end
-                            MFHI: begin
-                                currentState = stateMFHI;
+
+                            functMFHI: begin
+                                nextState = stateMFHI;
                             end
-                            MFLO: begin
-                                currentState = stateMFLO;
+
+                            functMFLO: begin
+                                nextState = stateMFLO;
                             end
-                            SLL: begin
-                                currentState = stateSLL;
+
+                            functSLL: begin
+                                nextState = stateSLL;
                             end
-                            SLLV: begin
-                                currentState = stateSLLV;
+
+                            functSLLV: begin
+                                nextState = stateSLLV;
                             end
-                            SLT: begin
-                                currentState = stateSLT;
+
+                            functSLT: begin
+                                nextState = stateSLT;
                             end
-                            SRA: begin
-                                currentState = stateSRA;
+
+                            functSRA: begin
+                                nextState = stateSRA;
                             end
-                            SRAV: begin
-                                currentState = stateSRAV;
+
+                            functSRAV: begin
+                                nextState = stateSRAV;
                             end
-                            SRL: begin
-                                currentState = stateSRL;
+
+                            functSRL: begin
+                                nextState = stateSRL;
                             end
-                            SUB: begin
-                                currentState = stateSUB;
+
+                            functSUB: begin
+                                nextState = stateSUB;
                             end
-                            BREAK: begin
-                                currentState = stateBREAK;
+
+                            functBREAK: begin
+                                nextState = stateBREAK;
                             end
-                            RTE: begin
-                                currentState = stateRTE;
+
+                            functRTE: begin
+                                nextState = stateRTE;
                             end
-                            ADDM: begin
-                                currentState = stateADDM;
+
+                            functADDM: begin
+                                nextState = stateADDM;
                             end
                         endcase
                     end
-                    
-                    //opcodeI
-                    ADDI: begin
-                        currentState = stateADDI;
-                    end
-                    ADDIU: begin
-                        currentState = stateADDIU;
-                    end
-                    BEQ: begin
-                        currentState = stateBEQ;
-                    end
-                    BNE: begin
-                        currentState = stateBNE;
-                    end
-                    BLE: begin
-                        currentState = stateBLE;
-                    end
-                    BGT: begin
-                        currentState = stateBGT;
-                    end
-                    SLLM: begin
-                        currentState = stateSLLM;
-                    end
-                    LB: begin
-                        currentState = stateLB;
-                    end
-                    LH: begin
-                        currentState = stateLH;
-                    end
-                    LUI: begin
-                        currentState = stateLUI;
-                    end
-                    LW: begin
-                        currentState = stateLW;
-                    end
-                    SB: begin
-                        currentState = stateSB;
-                    end
-                    SH: begin
-                        currentState = stateSH;
-                    end
-                    SLTI: begin
-                        currentState = stateSLTI;
-                    end
-                    SW: begin
-                        currentState = stateSW;
+
+                    opcodeADDI: begin
+                        nextState = stateADDI;
                     end
 
-                    //opcodeJ
-                    J: begin
-                        currentState = stateJ;
+                    opcodeADDIU: begin
+                        nextState = stateADDIU;
                     end
-                    JAL: begin
-                        currentState = stateJAL;
+
+                    opcodeBEQ: begin
+                        nextState = stateBEQ;
+                    end
+
+                    opcodeBNE: begin
+                        nextState = stateBNE;
+                    end
+
+                    opcodeBLE: begin
+                        nextState = stateBLE;
+                    end
+
+                    opcodeBGT: begin
+                        nextState = stateBGT;
+                    end
+
+                    opcodeSLLM: begin
+                        nextState = stateSLLM;
+                    end
+
+                    opcodeLB: begin
+                        nextState = stateLOAD;
+                    end
+
+                    opcodeLH: begin
+                        nextState = stateLOAD;
+                    end
+
+                    opcodeLUI: begin
+                        nextState = stateLUI;
+                    end
+
+                    opcodeLW: begin
+                        nextState = stateLOAD;
+                    end
+
+                    opcodeSB: begin
+                        nextState = stateSTORE;
+                    end
+
+                    opcodeSH: begin
+                        nextState = stateSTORE;
+                    end
+
+                    opcodeSLTI: begin
+                        nextState = stateSLTI;
+                    end
+
+                    opcodeSW: begin
+                        nextState = stateSTORE;
                     end
 
                     default: begin
-                        nextstate = exceptionOPCODE;
+                        nextState = exceptionOPCODE;
                     end
 
                 endcase
             end
 
 
-        //INSTRUÇÕES DO TIPO R 
+            //INSTRUÇÕES DO TIPO R 
             stateADD: begin
                 case (cycle)
                     3'b000: begin
@@ -291,7 +434,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -327,7 +470,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -372,7 +515,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -408,7 +551,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -453,7 +596,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -489,7 +632,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -528,7 +671,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -568,7 +711,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -620,7 +763,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -657,7 +800,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -696,7 +839,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -736,7 +879,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -773,14 +916,13 @@ always @(negedge clk) begin
                 DetSizeCtrl    = 2'b00;
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
-                AluControl     = 3'b000;
                 MemToReg       = 3'b000;
                 RegWrite       = 1'b0;
                 RegDst         = 1'b0;
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
-                ShiftScr       = 1'b0;
+                ShiftScr       = 2'b00;
                 WriteA         = 1'b0;
                 WriteB         = 1'b0;
                 WriteAuxA      = 1'b0;
@@ -816,7 +958,6 @@ always @(negedge clk) begin
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
                 PCSource       = 2'b00;
-                AluControl     = 3'b000;
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b000;
@@ -824,7 +965,7 @@ always @(negedge clk) begin
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
-                ShiftScr       = 1'b0;
+                ShiftScr       = 2'b00;
                 WriteA         = 1'b0;
                 WriteB         = 1'b0;
                 WriteAuxA      = 1'b0;
@@ -856,7 +997,6 @@ always @(negedge clk) begin
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
                 PCSource       = 2'b00;
-                AluControl     = 3'b000;
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b000;
@@ -864,7 +1004,7 @@ always @(negedge clk) begin
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
-                ShiftScr       = 1'b0;
+                ShiftScr       = 2'b00;
                 WriteA         = 1'b0;
                 WriteB         = 1'b0;
                 WriteAuxA      = 1'b0;
@@ -898,7 +1038,6 @@ always @(negedge clk) begin
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
                 PCSoruce       = 2'b11;
-                AluControl     = 3'b001;
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b001;
@@ -917,7 +1056,7 @@ always @(negedge clk) begin
 
                 ShiftControl   = 3'b010;
                 ShiftAmt       = 2'b01;
-                ShiftScr       = 1'b1;
+                ShiftScr       = 2'b01;
 
                 nextState = stateSRT;
             end
@@ -938,7 +1077,6 @@ always @(negedge clk) begin
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
                 PCSoruce       = 2'b11;
-                AluControl     = 3'b001;
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b001;
@@ -957,7 +1095,7 @@ always @(negedge clk) begin
 
                 ShiftControl   = 3'b010;
                 ShiftAmt       = 2'b00;
-                ShiftScr       = 1'b0;
+                ShiftScr       = 2'b00;
 
                 nextState = stateSRT;
             end
@@ -978,7 +1116,6 @@ always @(negedge clk) begin
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
                 PCSoruce       = 2'b11;
-                AluControl     = 3'b001;
                 ALUOp          = 3'b111;
                 ALUSrcA        = 2'b01;
                 ALUSrcB        = 3'b000;
@@ -997,7 +1134,7 @@ always @(negedge clk) begin
 
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
-                ShiftScr       = 1'b0;
+                ShiftScr       = 2'b00;
 
                 nextState = stateCOMMON;
             end
@@ -1018,9 +1155,8 @@ always @(negedge clk) begin
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
                 PCSoruce       = 2'b11;
-                AluControl     = 3'b001
                 ALUOp          = 3'b000;
-                ALUSrcA        = 2'b00;;
+                ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b001;
                 RegWrite       = 1'b1;
                 RegDst         = 1'b1;
@@ -1037,7 +1173,7 @@ always @(negedge clk) begin
 
                 ShiftControl   = 3'b100;
                 ShiftAmt       = 2'b01;
-                ShiftScr       = 1'b1;
+                ShiftScr       = 2'b01;
 
                 nextState = stateSRT;
             end
@@ -1091,7 +1227,6 @@ always @(negedge clk) begin
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
                 PCSoruce       = 2'b11;
-                AluControl     = 3'b001;
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b001;
@@ -1110,7 +1245,7 @@ always @(negedge clk) begin
 
                 ShiftControl   = 3'b011;
                 ShiftAmt       = 2'b01;
-                ShiftScr       = 1'b1;
+                ShiftScr       = 2'b01;
 
                 nextState = stateSRT;
             end
@@ -1140,7 +1275,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1176,7 +1311,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1221,7 +1356,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1257,7 +1392,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1302,7 +1437,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1342,7 +1477,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1378,7 +1513,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1418,7 +1553,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1455,7 +1590,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         Div0           = 1'b0;
@@ -1491,7 +1626,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         Div0           = 1'b0;
@@ -1528,7 +1663,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         Div0           = 1'b0;
@@ -1555,7 +1690,7 @@ always @(negedge clk) begin
 
 
 
-        //INSTRUÇÕES DO TIPO I
+            //INSTRUÇÕES DO TIPO I
             stateADDI: begin
                 case (cycle)
                     3'b000: begin
@@ -1579,7 +1714,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1616,7 +1751,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1659,7 +1794,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1701,7 +1836,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1738,7 +1873,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1775,7 +1910,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1817,7 +1952,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1844,13 +1979,12 @@ always @(negedge clk) begin
                         DetSizeCtrl    = 2'b00;
                         SetSizeCtrl    = 2'b00;
                         ALUoutputWrite = 1'b0;
-                        ALUOp          = 3'b000;
                         RegWrite       = 1'b0;
                         RegDst         = 1'b0;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1859,7 +1993,7 @@ always @(negedge clk) begin
                         //Parte do beq# ciclo 2
                         ALUSrcA        = 2'b01;
                         ALUSrcB        = 3'b000;
-                        AluControl     = 3'b111;
+                        ALUOp          = 3'b111;
                         PCSource       = 2'b01;
 
                         cycle = cycle + 1;
@@ -1896,7 +2030,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -1915,7 +2049,7 @@ always @(negedge clk) begin
 
             stateBLE: begin
                 case (cycle)
-                    3'b000 begin
+                    3'b000: begin
                         currentState <= stateBLE;
                         PCWrite        = 1'b0;
                         PCSource       = 2'b00;
@@ -1949,7 +2083,7 @@ always @(negedge clk) begin
 
                         cycle = cycle + 1;
                     end
-                    3'b001 begin
+                    3'b001: begin
                         currentState <= stateBLE;
                         PCWrite        = 1'b0;
                         PCWriteCond    = 1'b0; 
@@ -1983,7 +2117,7 @@ always @(negedge clk) begin
 
                         cycle = cycle + 1;
                     end
-                    3'b001 begin
+                    3'b001: begin
                         currentState <= stateBLE;
                         PCWrite        = 1'b0;
                         PCWriteCond    = 1'b0; 
@@ -1998,13 +2132,12 @@ always @(negedge clk) begin
                         DetSizeCtrl    = 2'b00;
                         SetSizeCtrl    = 2'b00;
                         ALUoutputWrite = 1'b0;
-                        ALUOp          = 3'b000;
                         RegWrite       = 1'b0;
                         RegDst         = 1'b0;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -2013,7 +2146,7 @@ always @(negedge clk) begin
                         //Parte do ble# ciclo 2
                         ALUSrcA        = 2'b01;
                         ALUSrcB        = 3'b000;
-                        AluControl     = 3'b111;
+                        ALUOp          = 3'b111;
                         PCSource       = 2'b01;
 
                         cycle = cycle + 1;
@@ -2051,7 +2184,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -2079,13 +2212,12 @@ always @(negedge clk) begin
                         DetSizeCtrl    = 2'b00;
                         SetSizeCtrl    = 2'b00;
                         ALUoutputWrite = 1'b0;
-                        ALUOp          = 3'b000;
                         RegWrite       = 1'b0;
                         RegDst         = 1'b0;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -2094,7 +2226,7 @@ always @(negedge clk) begin
                         //Parte do bgt# ciclo 2
                         ALUSrcA        = 2'b01;
                         ALUSrcB        = 3'b000;
-                        AluControl     = 3'b111;
+                        ALUOp          = 3'b111;
                         PCSource       = 2'b01;
 
                         cycle = cycle + 1;
@@ -2109,9 +2241,428 @@ always @(negedge clk) begin
                 endcase
             end  
 
+            // Parte de Farani
+            stateMAC: begin
+                PCWrite        = 1'b0;
+                PCWriteCond    = 1'b0;
+                PCSource       = 2'b00;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 2'b00;
+                SetSizeCtrl    = 2'b00;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                EPCWrite       = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 2'b00;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                MultOrDiv      = 1'b0;
+
+                ALUOp          = 3'b001;
+                ALUSrcA        = 2'b01;
+                ALUSrcB        = 2'b10;
+                ALUoutputWrite = 1'b1;
+
+                nextState = stateMR;
+            end
+
+            stateMR: begin
+                PCWrite        = 1'b0;
+                PCWriteCond    = 1'b0;
+                PCSource       = 2'b00;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 2'b00;
+                SetSizeCtrl    = 2'b00;
+                ALUoutputWrite = 1'b0;
+                ALUOp          = 3'b000;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b00;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                EPCWrite       = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 2'b00;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                MultOrDiv      = 1'b0;
+
+                IorD           = 2'b01;
+                MemRead        = 1'b1;
+
+                if (cycle == 3'b010) begin
+                    cycle = 3'b000;
+                    case (OPCODE)
+                        opcodeSLLM: begin
+                            nextState = stateSLLM;
+                        end
+                        opcodeLW: begin
+                            nextState = stateLW;
+                        end
+                        opcodeLB: begin
+                            nextState = stateLB;
+                        end
+                        opcodeLH: begin
+                            nextState = stateLH;
+                        end
+                        opcodeSB: begin
+                            nextState = stateSB;
+                        end
+                        opcodeSH: begin
+                            nextState = stateSH;
+                        end
+                        opcodeSW: begin
+                            nextState = stateSW;
+                        end
+                    endcase
+                end
+                else begin
+                    cycle = cycle + 1;
+                    nextState = currentState;
+                end
+            end
+        
+            stateSLLM: begin
+                PCWrite        = 1'b0;
+                PCWriteCond    = 1'b0;
+                PCSource       = 2'b00;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 2'b00;
+                SetSizeCtrl    = 2'b00;
+                ALUoutputWrite = 1'b0;
+                ALUOp          = 3'b000;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b00;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                EPCWrite       = 1'b0;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                MultOrDiv      = 1'b0;
+
+                ShiftAmt       = 2'b10;
+                ShiftScr       = 2'b01;
+                ShiftControl   = 3'b010;
+
+                nextState = stateSRT;
+            end
+
+            stateLOAD: begin
+                PCWrite        = 1'b0;
+                PCWriteCond    = 1'b0;
+                PCSource       = 2'b00;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                SetSizeCtrl    = 2'b00;
+                ALUoutputWrite = 1'b0;
+                ALUOp          = 3'b000;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b00;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                EPCWrite       = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 2'b00;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                MultOrDiv      = 1'b0;
+
+                case (OPCODE)
+                    opcodeLB: begin
+                        DetSizeCtrl = 2'b01;
+                    end
+                    opcodeLH: begin
+                        DetSizeCtrl = 2'b10;
+                    end
+                    opcodeLW: begin
+                        DetSizeCtrl = 2'b00;
+                    end
+                endcase
+
+                nextState = stateLRT;
+            end
+
+            stateSTORE: begin
+                PCWrite        = 1'b0;
+                PCWriteCond    = 1'b0;
+                PCSource       = 2'b00;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 2'b00;
+                ALUoutputWrite = 1'b0;
+                ALUOp          = 3'b000;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b00;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                EPCWrite       = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 2'b00;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                MultOrDiv      = 1'b0;
+
+                case (OPCODE)
+                    opcodeSB: begin
+                        SetSizeCtrl = 2'b01;
+                    end
+                    opcodeSH: begin
+                        SetSizeCtrl = 2'b10;
+                    end
+                    opcodeSW: begin
+                        SetSizeCtrl = 2'b00;
+                    end
+                endcase
+
+                nextState = stateMW;
+            end
+
+            stateSRT: begin
+                PCWrite        = 1'b0;
+                PCWriteCond    = 1'b0;
+                PCSource       = 2'b00;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 2'b00;
+                SetSizeCtrl    = 2'b00;
+                ALUoutputWrite = 1'b0;
+                ALUOp          = 3'b000;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b00;
+                EPCWrite       = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 2'b00;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                MultOrDiv      = 1'b0;
+
+                RegDst         = 1'b0;
+                RegWrite       = 1'b1;
+                MemToReg       = 3'b100;
+
+                nextState = stateCOMMON;
+            end
+
+            stateLRT: begin
+                PCWrite        = 1'b0;
+                PCWriteCond    = 1'b0;
+                PCSource       = 2'b00;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 2'b00;
+                SetSizeCtrl    = 2'b00;
+                ALUoutputWrite = 1'b0;
+                ALUOp          = 3'b000;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b00;
+                EPCWrite       = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 2'b00;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                MultOrDiv      = 1'b0;
+
+                RegDst         = 1'b0;
+                RegWrite       = 1'b1;
+                MemToReg       = 3'b001;
+
+                nextState = stateCOMMON;
+            end
+
+            stateMW: begin
+                PCWrite        = 1'b0;
+                PCWriteCond    = 1'b0;
+                PCSource       = 2'b00;
+                MemRead        = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 2'b00;
+                SetSizeCtrl    = 2'b00;
+                ALUoutputWrite = 1'b0;
+                ALUOp          = 3'b000;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b00;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                EPCWrite       = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 2'b00;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                MultOrDiv      = 1'b0;
+
+                IorD           = 2'b01;
+                MemWrite       = 1'b1;
+
+                if (cycle == 3'b010) begin
+                    cycle = 3'b000;
+                    nextState = stateCOMMON;
+                end
+                else begin
+                    cycle = cycle + 1;
+                    nextState = currentState;
+                end
+            end
+
+            stateLUI: begin
+                PCWrite        = 1'b0;
+                PCWriteCond    = 1'b0;
+                PCSource       = 2'b00;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 2'b00;
+                SetSizeCtrl    = 2'b00;
+                ALUoutputWrite = 1'b0;
+                ALUOp          = 3'b000;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b00;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                EPCWrite       = 1'b0;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                MultOrDiv      = 1'b0;
+
+                ShiftAmt       = 2'b11;
+                ShiftScr       = 2'b10;
+                ShiftControl   = 3'b010;
+
+                nextState = stateSRT;
+            end
+
+            stateSTLI: begin
+                PCWrite        = 1'b0;
+                PCWriteCond    = 1'b0;
+                PCSource       = 2'b00;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                MemToReg       = 3'b000;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 2'b00;
+                SetSizeCtrl    = 2'b00;
+                ALUoutputWrite = 1'b0;
+                RegWrite       = 1'b0;
+                RegDst         = 1'b0;
+                EPCWrite       = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 2'b00;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                MultOrDiv      = 1'b0;
+
+                ALUSrcA        = 2'b01;
+                ALUSrcB        = 2'b10;
+                ALUOp          = 3'b010;
+
+                nextState = stateLTRT;
+            end
+
+            stateLTRT: begin
+                PCWrite        = 1'b0;
+                PCWriteCond    = 1'b0;
+                PCSource       = 2'b00;
+                IorD           = 2'b00;
+                MemRead        = 1'b0;
+                MemWrite       = 1'b0;
+                IRWrite        = 1'b0;
+                HiWrite        = 1'b0;
+                LoWrite        = 1'b0;
+                Exception      = 1'b0;
+                DetSizeCtrl    = 2'b00;
+                SetSizeCtrl    = 2'b00;
+                ALUoutputWrite = 1'b0;
+                ALUOp          = 3'b000;
+                ALUSrcA        = 2'b00;
+                ALUSrcB        = 2'b00;
+                EPCWrite       = 1'b0;
+                ShiftControl   = 3'b000;
+                ShiftAmt       = 2'b00;
+                ShiftScr       = 2'b00;
+                WriteA         = 1'b0;
+                WriteB         = 1'b0;
+                WriteAuxA      = 1'b0;
+                MultOrDiv      = 1'b0;
+
+                RegDst         = 1'b0;
+                RegWrite       = 1'b1;
+                MemToReg       = 3'b101;
+
+                nextState = stateCOMMON;
+            end
 
 
-        //INSTRUÇÕES DO TIPO J
+            //INSTRUÇÕES DO TIPO J
             stateJUMP: begin
                 case (cycle)
                     3'b000: begin
@@ -2201,7 +2752,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -2228,7 +2779,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -2240,156 +2791,14 @@ always @(negedge clk) begin
                         RegWrite       = 1'b1;
                         MemToReg       = 3'b000;
                         //Errado deve ir para o reg31 *************************************************************************************************************************
-                        RegDst         = 1'b0;
+                        RegDst         = 2'b00;
 
                         nextState <= stateCOMMON;
                     end
                 endcase
             end
 
-
-
-        //OTHER INSTRUCTIONS
-            stateMAC: begin
-                PCWrite        = 1'b0;
-                PCWriteCond    = 1'b0;
-                PCSource       = 2'b00;
-                IorD           = 2'b00;
-                MemRead        = 1'b0;
-                MemWrite       = 1'b0;
-                MemToReg       = 3'b000;
-                IRWrite        = 1'b0;
-                HiWrite        = 1'b0;
-                LoWrite        = 1'b0;
-                Exception      = 1'b0;
-                DetSizeCtrl    = 2'b00;
-                SetSizeCtrl    = 2'b00;
-                RegWrite       = 1'b0;
-                RegDst         = 1'b0;
-                EPCWrite       = 1'b0;
-                ShiftControl   = 3'b000;
-                ShiftAmt       = 2'b00;
-                ShiftScr       = 1'b0;
-                WriteA         = 1'b0;
-                WriteB         = 1'b0;
-                WriteAuxA      = 1'b0;
-                MultOrDiv      = 1'b0;
-                ALUOp          = 3'b001;
-                ALUSrcA        = 2'b01;
-                ALUSrcB        = 3'b010;
-                ALUoutputWrite = 1'b1;
-
-                nextState = stateMR;
-            end
-
-            stateMR: begin
-                PCWrite        = 1'b0;
-                PCWriteCond    = 1'b0;
-                PCSource       = 2'b00;
-                MemWrite       = 1'b0;
-                MemToReg       = 3'b000;
-                IRWrite        = 1'b0;
-                HiWrite        = 1'b0;
-                LoWrite        = 1'b0;
-                Exception      = 1'b0;
-                DetSizeCtrl    = 2'b00;
-                SetSizeCtrl    = 2'b00;
-                AluControl     = 3'b000;
-                ALUoutputWrite = 1'b0;
-                ALUOp          = 3'b000;
-                ALUSrcA        = 2'b00;
-                ALUSrcB        = 3'b000;
-                RegWrite       = 1'b0;
-                RegDst         = 1'b0;
-                EPCWrite       = 1'b0;
-                ShiftControl   = 3'b000;
-                ShiftAmt       = 2'b00;
-                ShiftScr       = 1'b0;
-                WriteA         = 1'b0;
-                WriteB         = 1'b0;
-                WriteAuxA      = 1'b0;
-                MultOrDiv      = 1'b0;
-
-                IorD           = 2'b01;
-                MemRead        = 1'b1;
-
-                if (cycle == 3'b010) begin
-                    cycle = 3'b000;
-                    case (OPCODE)
-                        opcodeSLLM: begin
-                            nextState = stateSLLM;
-                        end
-                        opcodeLW: begin
-                            nextState = stateLW;
-                        end
-                        opcodeLB: begin
-                            nextState = stateLB;
-                        end
-                        opcodeLH: begin
-                            nextState = stateLH;
-                        end
-                        opcodeSB: begin
-                            nextState = stateSB;
-                        end
-                        opcodeSH: begin
-                            nextState = stateSH;
-                        end
-                        opcodeSW: begin
-                            nextState = stateSW;
-                        end
-                    endcase
-                end
-                else begin
-                    cycle = cycle + 1;
-                    nextState = currentState;
-                end
-            end
-                    
-            stateSTORE: begin
-                PCWrite        = 1'b0;
-                PCWriteCond    = 1'b0;
-                PCSource       = 2'b00;
-                IorD           = 2'b00;
-                MemRead        = 1'b0;
-                MemWrite       = 1'b0;
-                MemToReg       = 3'b000;
-                IRWrite        = 1'b0;
-                HiWrite        = 1'b0;
-                LoWrite        = 1'b0;
-                Exception      = 1'b0;
-                DetSizeCtrl    = 2'b00;
-                AluControl     = 3'b000;
-                ALUoutputWrite = 1'b0;
-                ALUOp          = 3'b000;
-                ALUSrcA        = 2'b00;
-                ALUSrcB        = 3'b000;
-                RegWrite       = 1'b0;
-                RegDst         = 1'b0;
-                EPCWrite       = 1'b0;
-                ShiftControl   = 3'b000;
-                ShiftAmt       = 2'b00;
-                ShiftScr       = 1'b0;
-                WriteA         = 1'b0;
-                WriteB         = 1'b0;
-                WriteAuxA      = 1'b0;
-                MultOrDiv      = 1'b0;
-
-                case (OPCODE)
-                    opcodeSB: begin
-                        SetSizeCtrl = 2'b01;
-                    end
-                    opcodeSH: begin
-                        SetSizeCtrl = 2'b10;
-                    end
-                    opcodeSW: begin
-                        SetSizeCtrl = 2'b00;
-                    end
-                endcase
-
-                nextState = stateMW;
-            end
-
-        //EXCEPTIONS
+            //EXCEPTIONS
             exceptionOverflow: begin
                 PCWriteCond    = 1'b0;
                 PCWrite        = 1'b0;
@@ -2405,12 +2814,11 @@ always @(negedge clk) begin
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
                 PCSource       = 2'b00;
-                ALUOp          = 3'b000;
                 RegWrite       = 1'b0;
                 RegDst         = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
-                ShiftScr       = 1'b0;
+                ShiftScr       = 2'b00;
                 WriteA         = 1'b0;
                 WriteB         = 1'b0;
                 WriteAuxA      = 1'b0;
@@ -2422,7 +2830,7 @@ always @(negedge clk) begin
                 OverfLow       = 1'b0;
                 MultOrDiv      = 1'b0;
                 //parte do overflow
-                AluControl     = 3'b010;
+                ALUOp          = 3'b010;
                 EPCWrite       = 1'b1;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b001;
@@ -2453,12 +2861,11 @@ always @(negedge clk) begin
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
                 PCSource       = 2'b00;
-                ALUOp          = 3'b000;
                 RegWrite       = 1'b0;
                 RegDst         = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
-                ShiftScr       = 1'b0;
+                ShiftScr       = 2'b00;
                 WriteA         = 1'b0;
                 WriteB         = 1'b0;
                 WriteAuxA      = 1'b0;
@@ -2470,7 +2877,7 @@ always @(negedge clk) begin
                 OverfLow       = 1'b0;
                 MultOrDiv      = 1'b0;
                 //parte do opcode n x
-                AluControl     = 3'b010;
+                ALUOp          = 3'b010;
                 EPCWrite       = 1'b1;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b001;
@@ -2501,12 +2908,11 @@ always @(negedge clk) begin
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
                 PCSource       = 2'b00;
-                ALUOp          = 3'b000;
                 RegWrite       = 1'b0;
                 RegDst         = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
-                ShiftScr       = 1'b0;
+                ShiftScr       = 2'b00;
                 WriteA         = 1'b0;
                 WriteB         = 1'b0;
                 WriteAuxA      = 1'b0;
@@ -2519,7 +2925,7 @@ always @(negedge clk) begin
                 MultOrDiv      = 1'b0;
                 //parte do div0
                 cycle          = 3'b001;
-                AluControl     = 3'b010;
+                ALUOp          = 3'b010;
                 EPCWrite       = 1'b1;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b001;
@@ -2560,7 +2966,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -2596,7 +3002,7 @@ always @(negedge clk) begin
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
-                        ShiftScr       = 1'b0;
+                        ShiftScr       = 2'b00;
                         WriteA         = 1'b0;
                         WriteB         = 1'b0;
                         WriteAuxA      = 1'b0;
@@ -2607,7 +3013,6 @@ always @(negedge clk) begin
                         Zero           = 1'b0;
                         OverfLow       = 1'b0;
                         MultOrDiv      = 1'b0;
-                        cycle          = 3'b000; 
                         //escrevendo em pc
                         ALUSrcA        = 2'b11;
                         PCWrite        = 1'b1;

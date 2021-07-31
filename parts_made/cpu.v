@@ -27,7 +27,7 @@ module cpu (
     wire       EPCWrite;
     wire [1:0] ShiftControl;
     wire [1:0] ShiftAmt;
-    wire       ShiftSrc;
+    wire [1:0] ShiftSrc;
     wire       WriteA;
     wire       WriteB;
     wire       WriteAuxA;
@@ -174,7 +174,7 @@ module cpu (
         A_output,
         B_output,
         mult_output_HI,
-        mult_output_LO,
+        mult_output_LO
     );
 
     div DIV_(
