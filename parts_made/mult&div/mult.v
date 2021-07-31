@@ -19,7 +19,7 @@ always @(posedge clock) begin
 		adicao = 64'b0;
         adicao = 64'b0;
     end
-    else if (MultOrDiv == 1) begin
+    else if (MultOrDiv == 0) begin
         add  = {A, 33'b0, 1'b0};
         sub  = {(~A + 1), 33'b0, 1'b0};
         prod = {32'b0, B, 1'b0};
