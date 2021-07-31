@@ -342,19 +342,14 @@ module cpu (
         ALUResult,
     );
 
-    shift_left_2 shiftLeft2Up_(
+    shift_left_2_up shiftLeft2Up_(
         instructions,
         ShifLeft_2_up_output,
     );
 
-    shift_left_2 shiftLeft2Down_(
+    shift_left_2_down shiftLeft2Down_(
         SignExtend_16_32_output,
         ShifLeft_2_down_output,
-    );
-
-    shift_left_16 shiftLeft16_32_(
-        inst_6_10,
-        ShiftLeft_16_32_output,
     );
 
     signExtend_16_32 signExtend16_32_(
