@@ -39,6 +39,7 @@ module cpu (
     wire       EG;
     wire       Zero;
     wire       OverfLow;
+    wire       N;
 
     // data wires
     //Instructions
@@ -53,7 +54,7 @@ module cpu (
     wire [31:0] mux_B_ULA_output;
     wire [31:0] mux_EXCEPTIONS_output;
     wire [31:0] mux_HI_output;
-    wire [4:0] mux_IR_REGISTERS_output;
+    wire [4:0]  mux_IR_REGISTERS_output;
     wire [31:0] mux_LO_output;
     wire [31:0] mux_MEMORY_REGISTERS_output;
     wire [31:0] mux_PC_MEMORY_output;
@@ -78,7 +79,7 @@ module cpu (
     //SHIF LEFT 16 -> 32
     wire [31:0] ShiftLeft_16_32_output;
     //SHIF LEFT 2 up
-    wire [31:0] ShifLeft_2_up_output;
+    wire [27:0] ShifLeft_2_up_output;
     //SHIF LEFT 2 down
     wire [31:0] ShifLeft_2_down_output;
     //IR
@@ -290,7 +291,7 @@ module cpu (
     mux_SHIFT_AMT muxShiftAmt_(
         ShiftAmt,
         B_output,
-        inst_6_10,
+        {27'b000000000000000000000000000 , inst_6_10},
         MemoryDataRegister_output,
         mux_SHIFT_AMT_output
     );
@@ -315,8 +316,8 @@ module cpu (
         clk,
         reset,
         ShiftControl,
-        mux_SHIFT_SRC_output,
         mux_SHIFT_AMT_output,
+        mux_SHIFT_SRC_output,
         ShifReg_output
     );
 
@@ -344,14 +345,16 @@ module cpu (
     );
     
     ula32 ULA_(
-        ALUOp,
         mux_A_ULA_output,
         mux_B_ULA_output,
+        ALUOp,
+        ALUResult,
         Overflow,
-        LT,
-        GT,
+        N,
         Zero,
-        ALUResult
+        EG,
+        LT,
+        GT
     );
 
     shift_left_2_up shiftLeft2Up_(
