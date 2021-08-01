@@ -151,7 +151,6 @@ always @(posedge clk) begin
             PCWriteCond    = 1'b0;
             IorD           = 2'b00;
             MemWrite       = 1'b0;
-            MemToReg       = 3'b000;
             IRWrite        = 1'b0;
             HIWrite        = 1'b0;
             LOWrite        = 1'b0;
@@ -159,8 +158,6 @@ always @(posedge clk) begin
             DetSizeCtrl    = 2'b00;
             SetSizeCtrl    = 2'b00;
             ALUoutputWrite = 1'b0;
-            RegWrite       = 1'b0;
-            RegDst         = 3'b000;
             ShiftControl   = 3'b000;
             ShiftAmt       = 2'b00;
             ShiftSrc       = 2'b00;
@@ -174,6 +171,10 @@ always @(posedge clk) begin
             PCSource       = 2'b00;
             ALUOp          = 3'b000;
             EPCWrite       = 1'b0;
+
+            RegDst         = 3'b010;
+            RegWrite       = 1'b1;
+            MemToReg       = 3'b110;
 
             reset_out      = 1'b0;
             state = stateCOMMON;
