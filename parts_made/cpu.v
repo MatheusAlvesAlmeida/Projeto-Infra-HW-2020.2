@@ -268,7 +268,6 @@ module cpu (
         LO_output,
         ShifReg_output,
         SignExtend_1_32_output,
-        ShiftLeft_16_32_output,
         mux_MEMORY_REGISTERS_output
     );
 
