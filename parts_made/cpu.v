@@ -53,7 +53,7 @@ module cpu (
     wire [31:0] mux_B_ULA_output;
     wire [31:0] mux_EXCEPTIONS_output;
     wire [31:0] mux_HI_output;
-    wire [31:0] mux_IR_REGISTERS_output;
+    wire [4:0] mux_IR_REGISTERS_output;
     wire [31:0] mux_LO_output;
     wire [31:0] mux_MEMORY_REGISTERS_output;
     wire [31:0] mux_PC_MEMORY_output;
@@ -257,7 +257,7 @@ module cpu (
     mux_IR_REGISTERS muxIrReg_(
         RegDst,
         inst16_20,
-        inst0_15,
+        inst0_15[15:11],
         mux_IR_REGISTERS_output
     );
 
