@@ -40,7 +40,8 @@ module ctrl_unit (
 );
 
 // Controladores do estado atual
-reg  [5:0] state;
+reg  [5:0] currentState;
+reg  [5:0] nextState;
 reg  [2:0] cycle;
 
 // Todos estados
@@ -140,79 +141,27 @@ parameter functRTE   = 6'b010011;
 parameter functADDM  = 6'b000101;
 
 initial begin
-    reset_out = 1'b1;
+    nextState <= stateRESET;
+end
+
+always @(posedge clk or posedge reset) begin
+    if (reset) 
+        currentState <= stateRESET;
+    else
+        currentState <= nextState;
 end
 
 //coloquem aq os estados à medida que forem implementando, não vou colocar todos de uma vez. Obg!
-always @(posedge clk) begin
-    if (reset == 1'b1) begin
-        if (state == stateRESET) begin
-            PCWrite        = 1'b0;
-            PCWriteCond    = 1'b0;
-            IorD           = 2'b00;
-            MemWrite       = 1'b0;
-            MemToReg       = 3'b000;
-            IRWrite        = 1'b0;
-            HIWrite        = 1'b0;
-            LOWrite        = 1'b0;
-            Exception      = 1'b0;
-            DetSizeCtrl    = 2'b00;
-            SetSizeCtrl    = 2'b00;
-            ALUoutputWrite = 1'b0;
-            RegWrite       = 1'b0;
-            RegDst         = 3'b000;
-            ShiftControl   = 3'b000;
-            ShiftAmt       = 2'b00;
-            ShiftSrc       = 2'b00;
-            WriteA         = 1'b0;
-            WriteB         = 1'b0;
-            WriteAuxA      = 1'b0;
-            MultOrDiv      = 1'b0;
-            MemRead        = 1'b0;
-            ALUSrcA        = 2'b00;
-            ALUSrcB        = 3'b000;
-            PCSource       = 2'b00;
-            ALUOp          = 3'b000;
-            EPCWrite       = 1'b0;
-
-            reset_out      = 1'b0;
-            state = stateCOMMON;
-        end
-        else begin
-            PCWrite        = 1'b0;
-            PCWriteCond    = 1'b0;
-            IorD           = 2'b00;
-            MemWrite       = 1'b0;
-            MemToReg       = 3'b000;
-            IRWrite        = 1'b0;
-            HIWrite        = 1'b0;
-            LOWrite        = 1'b0;
-            Exception      = 1'b0;
-            DetSizeCtrl    = 2'b00;
-            SetSizeCtrl    = 2'b00;
-            ALUoutputWrite = 1'b0;
-            RegWrite       = 1'b0;
-            RegDst         = 3'b000;
-            ShiftControl   = 3'b000;
-            ShiftAmt       = 2'b00;
-            ShiftSrc       = 2'b00;
-            WriteA         = 1'b0;
-            WriteB         = 1'b0;
-            WriteAuxA      = 1'b0;
-            MultOrDiv      = 1'b0;
-            MemRead        = 1'b0;
-            ALUSrcA        = 2'b00;
-            ALUSrcB        = 3'b000;
-            PCSource       = 2'b00;
-            ALUOp          = 3'b000;
-            EPCWrite       = 1'b0;
-
-            reset_out      = 1'b1;
-            state = stateRESET; 
-        end
+always @(negedge clk) begin
+    if(reset) begin
+        currentState <= stateRESET;
+        reset_out = 1'b0;
     end
     else begin
-        case (state)
+        case (currentState)
+            stateRESET: begin
+                nextState <= stateDECODE;
+            end
 
             // ESTADO COMUNS
             stateCOMMON: begin
@@ -247,11 +196,11 @@ always @(posedge clk) begin
 
                 if (cycle == 3'b010) begin
                     cycle = 3'b000;
-                    state = stateCOMMON;
+                    nextState = currentState;
                 end
                 else begin
                     cycle = cycle + 1;
-                    state = statePCW;
+                    nextState = statePCW;
                 end
             end
 
@@ -285,7 +234,7 @@ always @(posedge clk) begin
                 PCWriteCond    = 1'b1;
                 PCWrite        = 1'b1;
 
-                state = stateRW;
+                nextState = stateRW;
             end
 
             stateRW: begin
@@ -305,7 +254,7 @@ always @(posedge clk) begin
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b000;
-                RegWrite       = 1'b0;            
+                RegWrite       = 1'b0;
                 RegDst         = 3'b000;
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
@@ -322,137 +271,137 @@ always @(posedge clk) begin
                     opcodeR: begin
                         case (Funct)
                             functADD: begin
-                                state = stateADD;    
+                                nextState = stateADD;    
                             end
 
                             functAND: begin
-                                state = stateAND;
+                                nextState = stateAND;
                             end
 
                             functDIV: begin
-                                state = stateDIV;
+                                nextState = stateDIV;
                             end
 
                             functMULT: begin
-                                state = stateMULT;
+                                nextState = stateMULT;
                             end
 
                             functJR: begin
-                                state = stateJR;
+                                nextState = stateJR;
                             end
 
                             functMFHI: begin
-                                state = stateMFHI;
+                                nextState = stateMFHI;
                             end
 
                             functMFLO: begin
-                                state = stateMFLO;
+                                nextState = stateMFLO;
                             end
 
                             functSLL: begin
-                                state = stateSLL;
+                                nextState = stateSLL;
                             end
 
                             functSLLV: begin
-                                state = stateSLLV;
+                                nextState = stateSLLV;
                             end
 
                             functSLT: begin
-                                state = stateSLT;
+                                nextState = stateSLT;
                             end
 
                             functSRA: begin
-                                state = stateSRA;
+                                nextState = stateSRA;
                             end
 
                             functSRAV: begin
-                                state = stateSRAV;
+                                nextState = stateSRAV;
                             end
 
                             functSRL: begin
-                                state = stateSRL;
+                                nextState = stateSRL;
                             end
 
                             functSUB: begin
-                                state = stateSUB;
+                                nextState = stateSUB;
                             end
 
                             functBREAK: begin
-                                state = stateBREAK;
+                                nextState = stateBREAK;
                             end
 
                             functRTE: begin
-                                state = stateRTE;
+                                nextState = stateRTE;
                             end
 
                             functADDM: begin
-                                state = stateADDM;
+                                nextState = stateADDM;
                             end
                         endcase
                     end
 
                     opcodeADDI: begin
-                        state = stateADDI;
+                        nextState = stateADDI;
                     end
 
                     opcodeADDIU: begin
-                        state = stateADDIU;
+                        nextState = stateADDIU;
                     end
 
                     opcodeBEQ: begin
-                        state = stateBEQ;
+                        nextState = stateBEQ;
                     end
 
                     opcodeBNE: begin
-                        state = stateBNE;
+                        nextState = stateBNE;
                     end
 
                     opcodeBLE: begin
-                        state = stateBLE;
+                        nextState = stateBLE;
                     end
 
                     opcodeBGT: begin
-                        state = stateBGT;
+                        nextState = stateBGT;
                     end
 
                     opcodeSLLM: begin
-                        state = stateSLLM;
+                        nextState = stateSLLM;
                     end
 
                     opcodeLB: begin
-                        state = stateLOAD;
+                        nextState = stateLOAD;
                     end
 
                     opcodeLH: begin
-                        state = stateLOAD;
+                        nextState = stateLOAD;
                     end
 
                     opcodeLUI: begin
-                        state = stateLUI;
+                        nextState = stateLUI;
                     end
 
                     opcodeLW: begin
-                        state = stateLOAD;
+                        nextState = stateLOAD;
                     end
 
                     opcodeSB: begin
-                        state = stateSTORE;
+                        nextState = stateSTORE;
                     end
 
                     opcodeSH: begin
-                        state = stateSTORE;
+                        nextState = stateSTORE;
                     end
 
                     opcodeSLTI: begin
-                        state = stateSLTI;
+                        nextState = stateSLTI;
                     end
 
                     opcodeSW: begin
-                        state = stateSTORE;
+                        nextState = stateSTORE;
                     end
 
                     default: begin
-                        state = exceptionOPCODE;
+                        nextState = exceptionOPCODE;
                     end
 
                 endcase
@@ -492,7 +441,7 @@ always @(posedge clk) begin
                         MultOrDiv      = 1'b0;
                         
                         cycle          = cycle + 1;
-                        state          = stateADD;    
+                        nextState      = currentState;    
                     end
                     3'b001: begin
                         PCWriteCond    = 1'b0;
@@ -524,7 +473,7 @@ always @(posedge clk) begin
                         LOWrite        = 1'b0;
 
                         cycle          = 3'b000;
-                        state      = stateCOMMON;
+                        nextState      = stateCOMMON;
                     end
                 endcase
             end
@@ -561,7 +510,7 @@ always @(posedge clk) begin
                         MultOrDiv      = 1'b0;
                         
                         cycle          = cycle + 1;
-                        state          = stateAND;    
+                        nextState      = currentState;    
                     end
                     3'b001: begin
                         PCWriteCond    = 1'b0;
@@ -593,7 +542,7 @@ always @(posedge clk) begin
                         LOWrite        = 1'b0;
 
                         cycle          = 3'b000;
-                        state      = stateCOMMON;
+                        nextState      = stateCOMMON;
                     end
                 endcase
             end
@@ -630,7 +579,7 @@ always @(posedge clk) begin
                         //parte do div
                         MultOrDiv      = 1'b1;
                         cycle          = cycle + 1;
-                        state          = stateDIV;  
+                        nextState      = currentState;    
                     end
                     3'b001: begin
                         PCWriteCond    = 1'b0;
@@ -649,7 +598,7 @@ always @(posedge clk) begin
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
                         RegWrite       = 1'b0;
-                        RegDst         = 3'b000;                        
+                        RegDst         = 3'b000;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -663,7 +612,7 @@ always @(posedge clk) begin
                         LOWrite        = 1'b1;
 
                         cycle          = cycle + 1;
-                        state          = stateDIV;
+                        nextState      = currentState;
                     end
                     3'b010: begin
                         PCWriteCond    = 1'b0; 
@@ -682,7 +631,7 @@ always @(posedge clk) begin
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
                         RegWrite       = 1'b0;
-                        RegDst         = 3'b000;                        
+                        RegDst         = 3'b000;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -696,7 +645,7 @@ always @(posedge clk) begin
                         LOWrite        = 1'b1;
                         
                         cycle          = cycle + 1;
-                        state          = stateDIV;
+                        nextState      = currentState;
                     end
                     3'b011: begin
                         PCWriteCond    = 1'b0; 
@@ -715,7 +664,7 @@ always @(posedge clk) begin
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
                         RegWrite       = 1'b0;
-                        RegDst         = 3'b000;                        
+                        RegDst         = 3'b000;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -730,10 +679,10 @@ always @(posedge clk) begin
 
                         cycle = 3'b000;
                         if (Div0) begin
-                            state = exceptionDiv0;
+                            nextState = exceptionDiv0;
                         end
                         else begin
-                            state = stateCOMMON;
+                            nextState = stateCOMMON;
                         end
                     end
                 endcase
@@ -760,7 +709,7 @@ always @(posedge clk) begin
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
                         RegWrite       = 1'b0;
-                        RegDst         = 3'b000;                        
+                        RegDst         = 3'b000;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -772,7 +721,7 @@ always @(posedge clk) begin
                         MultOrDiv      = 1'b0;
                         cycle          = cycle + 1;
 
-                        state          = stateMULT;
+                        nextState = currentState;
                     end
                     3'b001: begin
                         PCWriteCond    = 1'b0; 
@@ -791,7 +740,7 @@ always @(posedge clk) begin
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
                         RegWrite       = 1'b0;
-                        RegDst         = 3'b000;                        
+                        RegDst         = 3'b000;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -805,7 +754,7 @@ always @(posedge clk) begin
                         LOWrite        = 1'b1;
                         cycle          = cycle + 1;
 
-                        state          = stateMULT;
+                        nextState = currentState;
                     end
                     3'b010: begin
                         PCWriteCond    = 1'b0; 
@@ -824,7 +773,7 @@ always @(posedge clk) begin
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
                         RegWrite       = 1'b0;
-                        RegDst         = 3'b000;                        
+                        RegDst         = 3'b000;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -838,7 +787,7 @@ always @(posedge clk) begin
                         LOWrite        = 1'b1;
                         cycle          = cycle + 1;
 
-                        state          = stateMULT;
+                        nextState = currentState;
                     end
                     3'b011: begin
                         PCWriteCond    = 1'b0; 
@@ -857,7 +806,7 @@ always @(posedge clk) begin
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
                         RegWrite       = 1'b0;
-                        RegDst         = 3'b000;                        
+                        RegDst         = 3'b000;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -871,10 +820,10 @@ always @(posedge clk) begin
                         LOWrite        = 1'b0;
                         cycle          = 3'b000;
                         if(OverfLow) begin
-                            state = exceptionOverflow;
+                            nextState = exceptionOverflow;
                         end
                         else begin
-                            state = stateCOMMON;
+                            nextState = stateCOMMON;
                         end
                     end
                 endcase
@@ -894,7 +843,7 @@ always @(posedge clk) begin
                 ALUoutputWrite = 1'b0;
                 MemToReg       = 3'b000;
                 RegWrite       = 1'b0;
-                RegDst         = 3'b000;                        
+                RegDst         = 3'b000;
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
@@ -911,7 +860,7 @@ always @(posedge clk) begin
                 PCSource       = 3'b11;
                 PCWrite        = 1'b1;
 
-                state = stateCOMMON;
+                nextState = stateCOMMON;
             end
 
             stateMFHI: begin
@@ -931,7 +880,7 @@ always @(posedge clk) begin
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b000;
-                RegDst         = 3'b000;                        
+                RegDst         = 3'b000;
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
@@ -944,7 +893,7 @@ always @(posedge clk) begin
                 MemToReg       = 3'b010;
                 RegWrite       = 1'b1;
 
-                state = stateCOMMON;
+                nextState = stateCOMMON;
             end
 
             stateMFLO: begin
@@ -964,7 +913,7 @@ always @(posedge clk) begin
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b000;
-                RegDst         = 3'b000;                        
+                RegDst         = 3'b000;
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
@@ -977,7 +926,7 @@ always @(posedge clk) begin
                 MemToReg       = 3'b011;
                 RegWrite       = 1'b1;
 
-                state = stateCOMMON;
+                nextState = stateCOMMON;
             end
 
             stateSLL: begin
@@ -1000,7 +949,7 @@ always @(posedge clk) begin
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b001;
                 RegWrite       = 1'b1;
-                RegDst         = 3'b001;
+                RegDst         = 3'b000;
                 EPCWrite       = 1'b1;
                 WriteA         = 1'b1;
                 WriteB         = 1'b1;
@@ -1010,7 +959,7 @@ always @(posedge clk) begin
                 ShiftAmt       = 2'b01;
                 ShiftSrc       = 2'b01;
 
-                state = stateSRT;
+                nextState = stateSRT;
             end
 
             stateSLLV: begin
@@ -1043,7 +992,7 @@ always @(posedge clk) begin
                 ShiftAmt       = 2'b00;
                 ShiftSrc       = 2'b00;
 
-                state = stateSRT;
+                nextState = stateSRT;
             end
 
             stateSLT: begin
@@ -1066,7 +1015,7 @@ always @(posedge clk) begin
                 ALUSrcA        = 2'b01;
                 ALUSrcB        = 3'b000;
                 RegWrite       = 1'b0;
-                RegDst         = 3'b000;                        
+                RegDst         = 3'b000;
                 EPCWrite       = 1'b1;
                 WriteA         = 1'b1;
                 WriteB         = 1'b1;
@@ -1076,7 +1025,7 @@ always @(posedge clk) begin
                 ShiftAmt       = 2'b00;
                 ShiftSrc       = 2'b00;
 
-                state = stateCOMMON;
+                nextState = stateCOMMON;
             end
 
             stateSRA: begin
@@ -1109,7 +1058,7 @@ always @(posedge clk) begin
                 ShiftAmt       = 2'b01;
                 ShiftSrc       = 2'b01;
 
-                state = stateSRT;
+                nextState = stateSRT;
             end
 
             stateSRAV: begin
@@ -1142,7 +1091,7 @@ always @(posedge clk) begin
                 ShiftAmt       = 2'b00;
                 ShiftSrc       = 2'b00;
 
-                state = stateSRT;
+                nextState = stateSRT;
             end
 
             stateSRL: begin
@@ -1175,7 +1124,7 @@ always @(posedge clk) begin
                 ShiftAmt       = 2'b01;
                 ShiftSrc       = 2'b01;
 
-                state = stateSRT;
+                nextState = stateSRT;
             end
 
             stateSUB: begin
@@ -1210,7 +1159,7 @@ always @(posedge clk) begin
                         MultOrDiv      = 1'b0;
                         
                         cycle          = cycle + 1;
-                        state          = stateSUB;   
+                        nextState      = currentState;    
                     end
                     3'b001: begin
                         PCWriteCond    = 1'b0;
@@ -1242,7 +1191,7 @@ always @(posedge clk) begin
                         LOWrite        = 1'b0;
 
                         cycle          = 3'b000;
-                        state      = stateCOMMON;
+                        nextState      = stateCOMMON;
                     end
                 endcase
             end
@@ -1279,7 +1228,7 @@ always @(posedge clk) begin
                         MultOrDiv      = 1'b0;
                         
                         cycle          = cycle + 1;
-                        state          = stateBREAK;
+                        nextState      = currentState;    
                     end
                     3'b001: begin
                         PCWriteCond    = 1'b1; //escreve no pc
@@ -1311,7 +1260,7 @@ always @(posedge clk) begin
                         LOWrite        = 1'b0;
 
                         cycle          = 3'b000;
-                        state      = stateCOMMON;
+                        nextState      = stateCOMMON;
                     end
                 endcase
             end
@@ -1348,7 +1297,7 @@ always @(posedge clk) begin
                         MultOrDiv      = 1'b0;
 
                         cycle          = 3'b000;
-                        state      = stateCOMMON;
+                        nextState      = stateCOMMON;
                     end
                 endcase
             end
@@ -1385,7 +1334,7 @@ always @(posedge clk) begin
                         ALUOp          = 3'b000;
                         ALUoutputWrite = 1'b1;
                         cycle          = cycle + 1; 
-                        state          = stateADDM;
+                        nextState      = currentState;
                     end
                     3'b001: begin
                         PCWriteCond    = 1'b0; 
@@ -1417,7 +1366,7 @@ always @(posedge clk) begin
                         IorD           = 2'b01;
                         MemRead        = 1'b1;
                         cycle          = cycle + 1; 
-                        state          = stateADDM;
+                        nextState      = currentState;
                     end
                     3'b011: begin //wait
                         PCWriteCond    = 1'b0; 
@@ -1449,7 +1398,7 @@ always @(posedge clk) begin
                         ALUOp          = 3'b000;
                         ALUoutputWrite = 1'b0;
                         cycle          = cycle + 1; 
-                        state          = stateADDM;
+                        nextState      = currentState;
                     end
                     3'b100: begin
                         PCWriteCond    = 1'b0; 
@@ -1481,7 +1430,7 @@ always @(posedge clk) begin
                         DetSizeCtrl    = 2'b10;
                         WriteAuxA      = 1'b1;
                         cycle          = cycle + 1; 
-                        state          = stateADDM;
+                        nextState      = currentState;
                     end
                     3'b101: begin
                         PCWriteCond    = 1'b0; 
@@ -1513,7 +1462,7 @@ always @(posedge clk) begin
                         SetSizeCtrl    = 2'b01;
                         MemRead        = 1'b1;
                         cycle          = cycle + 1; 
-                        state          = stateADDM;
+                        nextState      = currentState;
                     end
                     3'b111: begin
                         PCWriteCond    = 1'b0; 
@@ -1544,9 +1493,8 @@ always @(posedge clk) begin
                         WriteAuxA      = 1'b0;
                         SetSizeCtrl    = 2'b00;
                         MemRead        = 1'b0;
-
-                        cycle          = 3'b000; 
-                        state          = stateCOMMON;
+                        cycle          = cycle + 1; 
+                        nextState      = currentState;
                     end
                 endcase
             end
@@ -1585,7 +1533,7 @@ always @(posedge clk) begin
                         ALUoutputWrite = 1'b1; //escrever no aluout
 
                         cycle          = cycle + 1;
-                        state          = stateADDI;    
+                        nextState      = currentState;    
                     end
                     3'b001: begin
                         PCWriteCond    = 1'b0;
@@ -1617,11 +1565,11 @@ always @(posedge clk) begin
 
                         if(OverfLow) begin
                             cycle          = 3'b000;
-                            state = exceptionOverflow;
+                            nextState = exceptionOverflow;
                         end
                         else begin  
                             cycle          = cycle + 1;
-                            state          = stateADDI;
+                            nextState      = currentState; 
                         end  
                     end
                     3'b010: begin
@@ -1641,7 +1589,7 @@ always @(posedge clk) begin
                         DetSizeCtrl    = 2'b00;
                         SetSizeCtrl    = 2'b00;
                         RegWrite       = 1'b1;  //escrever no registrador
-                        RegDst         = 0'b011; //libera o registrador rt
+                        RegDst         = 3'b011; //libera o registrador rt
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1653,7 +1601,7 @@ always @(posedge clk) begin
                         ALUoutputWrite = 1'b1;
 
                         cycle          = 3'b000;
-                        state      = stateCOMMON;
+                        nextState      = stateCOMMON;
                     end
                 endcase
             end
@@ -1689,7 +1637,7 @@ always @(posedge clk) begin
                         ALUoutputWrite = 1'b1; //escrever no aluout
 
                         cycle          = cycle + 1;
-                        state          = stateADDIU;  
+                        nextState      = currentState;    
                     end
                     3'b001: begin
                         PCWriteCond    = 1'b0;
@@ -1720,7 +1668,7 @@ always @(posedge clk) begin
                         ALUoutputWrite = 1'b1;
 
                         cycle          = cycle + 1;
-                        state          = stateADDIU;    
+                        nextState      = currentState;    
                     end
                     3'b010: begin
                         PCWriteCond    = 1'b0;
@@ -1751,7 +1699,7 @@ always @(posedge clk) begin
                         ALUoutputWrite = 1'b1;
 
                         cycle          = 3'b000;
-                        state      = stateCOMMON;
+                        nextState      = stateCOMMON;
                     end
                 endcase
             end
@@ -1759,6 +1707,7 @@ always @(posedge clk) begin
             stateBEQ: begin
                 case (cycle)
                     3'b000: begin
+                        currentState <= stateBEQ;
                         PCWrite        = 1'b0;
                         PCSource       = 2'b00;
                         PCWriteCond    = 1'b0; 
@@ -1789,9 +1738,9 @@ always @(posedge clk) begin
                         ALUSrcB        = 3'b010;
 
                         cycle = cycle + 1;
-                        state = stateBEQ;
-		            end
+		    end
                     3'b001: begin
+                        currentState <= stateBEQ;
                         PCWrite        = 1'b0;
                         PCWriteCond    = 1'b0; 
                         IorD           = 2'b00;
@@ -1823,19 +1772,21 @@ always @(posedge clk) begin
                         PCSource       = 2'b01;
 
                         cycle = cycle + 1;
-			            state = stateBEQ;
+			nextState = currentState;
                     end
                     3'b010: begin
+                        currentState <= stateBEQ;
                         if (EG == 1'b1) begin
                             PCWrite     = 1'b1;
                         end
-			            cycle = 3'b000;
-			            state = stateCOMMON;
+			cycle = 3'b000;
+			nextState <= stateCOMMON;
                     end
                 endcase      
             end
 
             stateBNE: begin
+                currentState <= stateBNE;
                 PCWrite        = 1'b0;
                 PCSource       = 2'b00;
                 PCWriteCond    = 1'b0; 
@@ -1866,12 +1817,13 @@ always @(posedge clk) begin
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b010;
 
-                state = stateCOMMON;
+                nextState <= stateCOMMON;
             end
 
             stateBLE: begin
                 case (cycle)
                     3'b000: begin
+                        currentState <= stateBLE;
                         PCWrite        = 1'b0;
                         PCSource       = 2'b00;
                         PCWriteCond    = 1'b0; 
@@ -1903,9 +1855,9 @@ always @(posedge clk) begin
                         ALUSrcB        = 2'b10;
 
                         cycle = cycle + 1;
-                        state = stateBLE;
                     end
                     3'b001: begin
+                        currentState <= stateBLE;
                         PCWrite        = 1'b0;
                         PCWriteCond    = 1'b0; 
                         IorD           = 2'b00;
@@ -1937,9 +1889,9 @@ always @(posedge clk) begin
                         PCSource       = 2'b01;
 
                         cycle = cycle + 1;
-                        state = stateBLE;
                     end
                     3'b010: begin
+                        currentState <= stateBLE;
                         PCWrite        = 1'b0;
                         PCWriteCond    = 1'b0; 
                         IorD           = 2'b00;
@@ -1973,10 +1925,11 @@ always @(posedge clk) begin
                         cycle = cycle + 1;
                     end
                     3'b011: begin
+                        currentState <= stateBLE;
                         if (LT == 1'b0) begin
                             PCWrite     = 1'b1;
                         end
-                        state = stateCOMMON;
+                        nextState <= stateCOMMON;
                     end
                 endcase
             end
@@ -1984,6 +1937,7 @@ always @(posedge clk) begin
             stateBGT: begin
                 case (cycle)
                     3'b000: begin
+                        currentState <= stateBGT;
                         PCWrite        = 1'b0;
                         PCSource       = 2'b00;
                         PCWriteCond    = 1'b0; 
@@ -2015,9 +1969,9 @@ always @(posedge clk) begin
                         ALUSrcB        = 3'b010;
 
                         cycle = cycle + 1;
-                        state = stateBGT;
                     end
                     3'b001: begin
+                        currentState <= stateBGT;
                         PCWrite        = 1'b0;
                         PCWriteCond    = 1'b0; 
                         IorD           = 2'b00;
@@ -2049,13 +2003,13 @@ always @(posedge clk) begin
                         PCSource       = 2'b01;
 
                         cycle = cycle + 1;
-                        state = stateBGT;
                     end
                     3'b010: begin
+                        currentState <= stateBGT;
                         if (GT == 1'b1) begin
                             PCWrite     = 1'b1;
                         end
-                        state = stateCOMMON;
+                        nextState <= stateCOMMON;
                     end
                 endcase
             end  
@@ -2091,7 +2045,7 @@ always @(posedge clk) begin
                 ALUSrcB        = 2'b10;
                 ALUoutputWrite = 1'b1;
 
-                state = stateMR;
+                nextState = stateMR;
             end
 
             stateMR: begin
@@ -2128,31 +2082,31 @@ always @(posedge clk) begin
                     cycle = 3'b000;
                     case (OPCODE)
                         opcodeSLLM: begin
-                            state = stateSLLM;
+                            nextState = stateSLLM;
                         end
                         opcodeLW: begin
-                            state = stateLOAD;
+                            nextState = stateLOAD;
                         end
                         opcodeLB: begin
-                            state = stateLOAD;
+                            nextState = stateLOAD;
                         end
                         opcodeLH: begin
-                            state = stateLOAD;
+                            nextState = stateLOAD;
                         end
                         opcodeSB: begin
-                            state = stateSTORE;
+                            nextState = stateSTORE;
                         end
                         opcodeSH: begin
-                            state = stateSTORE;
+                            nextState = stateSTORE;
                         end
                         opcodeSW: begin
-                            state = stateSTORE;
+                            nextState = stateSTORE;
                         end
                     endcase
                 end
                 else begin
                     cycle = cycle + 1;
-                    state = stateMR;
+                    nextState = currentState;
                 end
             end
         
@@ -2186,7 +2140,7 @@ always @(posedge clk) begin
                 ShiftSrc       = 2'b01;
                 ShiftControl   = 3'b010;
 
-                state = stateSRT;
+                nextState = stateSRT;
             end
 
             stateLOAD: begin
@@ -2229,7 +2183,7 @@ always @(posedge clk) begin
                     end
                 endcase
 
-                state = stateLRT;
+                nextState = stateLRT;
             end
 
             stateSTORE: begin
@@ -2272,7 +2226,7 @@ always @(posedge clk) begin
                     end
                 endcase
 
-                state = stateMW;
+                nextState = stateMW;
             end
 
             stateSRT: begin
@@ -2305,7 +2259,7 @@ always @(posedge clk) begin
                 RegWrite       = 1'b1;
                 MemToReg       = 3'b100;
 
-                state = stateCOMMON;
+                nextState = stateCOMMON;
             end
 
             stateLRT: begin
@@ -2338,7 +2292,7 @@ always @(posedge clk) begin
                 RegWrite       = 1'b1;
                 MemToReg       = 3'b001;
 
-                state = stateCOMMON;
+                nextState = stateCOMMON;
             end
 
             stateMW: begin
@@ -2373,11 +2327,11 @@ always @(posedge clk) begin
 
                 if (cycle == 3'b010) begin
                     cycle = 3'b000;
-                    state = stateCOMMON;
+                    nextState = stateCOMMON;
                 end
                 else begin
                     cycle = cycle + 1;
-                    state = stateMW;
+                    nextState = currentState;
                 end
             end
 
@@ -2411,7 +2365,7 @@ always @(posedge clk) begin
                 ShiftSrc       = 2'b10;
                 ShiftControl   = 3'b010;
 
-                state = stateSRT;
+                nextState = stateSRT;
             end
 
             stateSLTI: begin
@@ -2444,7 +2398,7 @@ always @(posedge clk) begin
                 ALUSrcB        = 2'b10;
                 ALUOp          = 3'b010;
 
-                state = stateLTRT;
+                nextState = stateLTRT;
             end
 
             stateLTRT: begin
@@ -2477,7 +2431,7 @@ always @(posedge clk) begin
                 RegWrite       = 1'b1;
                 MemToReg       = 3'b101;
 
-                state = stateCOMMON;
+                nextState = stateCOMMON;
             end
 
 
@@ -2485,6 +2439,7 @@ always @(posedge clk) begin
             stateJUMP: begin
                 case (cycle)
                     3'b000: begin
+                        currentState <= stateDIV;
                         PCWriteCond    = 1'b0; 
                         IorD           = 2'b00;
                         MemRead        = 1'b0;
@@ -2513,11 +2468,9 @@ always @(posedge clk) begin
                         //Parte do j#
                         PCWrite        = 1'b1;
                         PCSource       = 2'b10;
-
-                        cycle = cycle + 1;
-                        state = stateJUMP;
                     end
                     3'b001: begin
+                        currentState <= stateJUMP;
                         PCWriteCond    = 1'b0; 
                         IorD           = 2'b00;
                         MemRead        = 1'b0;
@@ -2546,9 +2499,6 @@ always @(posedge clk) begin
                         //Parte do j#
                         PCWrite        = 1'b0;
                         PCSource       = 2'b00;
-
-                        cycle = 3'b000;
-                        state = stateCOMMON;
                     end
                 endcase
             end
@@ -2616,7 +2566,7 @@ always @(posedge clk) begin
                         //Errado deve ir para o reg31 *************************************************************************************************************************
                         RegDst         = 3'b000;
 
-                        state = stateCOMMON;
+                        nextState <= stateCOMMON;
                     end
                 endcase
             end
@@ -2655,11 +2605,11 @@ always @(posedge clk) begin
                 
                 if (cycle == 3'b001) begin
                     cycle = 3'b000;
-                    state = waitAndPCwrite;
+                    nextState = waitAndPCwrite;
                 end
                 else begin
                     cycle = cycle + 1;
-                    state = exceptionOverflow;
+                    nextState = currentState;
                 end
             end
 
@@ -2696,11 +2646,11 @@ always @(posedge clk) begin
 
                 if (cycle == 3'b001) begin
                     cycle = 3'b000;
-                    state = waitAndPCwrite;
+                    nextState = waitAndPCwrite;
                 end
                 else begin
                     cycle = cycle + 1;
-                    state = exceptionOPCODE;
+                    nextState = currentState;
                 end
             end
 
@@ -2738,11 +2688,11 @@ always @(posedge clk) begin
                 
                 if (cycle == 3'b001) begin
                     cycle = 3'b000;
-                    state = waitAndPCwrite;
+                    nextState = waitAndPCwrite;
                 end
                 else begin
                     cycle = cycle + 1;
-                    state = exceptionDiv0;
+                    nextState = currentState;
                 end
             end
 
@@ -2778,7 +2728,7 @@ always @(posedge clk) begin
                         MultOrDiv      = 1'b0;
 
                         cycle          = cycle + 1; 
-                        state = waitAndPCwrite;
+                        nextState      = currentState;
                     end
                     3'b001: begin
                         PCWriteCond    = 1'b0; 
@@ -2811,7 +2761,7 @@ always @(posedge clk) begin
                         PCWrite        = 1'b1;
 
                         cycle          = 3'b000;
-                        state      = stateCOMMON;
+                        nextState      = stateCOMMON;
                     end
                 endcase
             end
