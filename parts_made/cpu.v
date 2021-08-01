@@ -383,6 +383,6 @@ module cpu (
         ReadData2_output
     );
     
-    ctrl_unit_(clk, reset, OPCODE, Overflow, Zero, LT, GT, EG, Div0, IRWrite, RegDst, RegWrite, WriteA, WriteB,  ALUSrcA, ALUSrcB, ALUOp, EPCWrite, PCSource, PCWrite, MemToReg, PCWriteCond, IorD, MemRead, MemWrite, MultOrDiv, HiWrite, LoWrite, Exception, DetSizeCtrl, SetSizeCtrl, MemoryDataWrite, AluOPWrite, ALUOp, RegDst, ShiftControl, ShiftAmt, ShiftSrc, WriteAuxA);
+    ctrl_unit_(clk, reset, OPCODE, PCWriteCond, PCWrite, IorD, MemRead, MemWrite, MemToReg, IRWrite, MultOrDiv, HIWrite, LOWrite, Exception, DetSizeCtrl, SetSizeCtrl, ALUOutWrite, PCSource, ALUOp, ALUSrcB, ALUSrcA, RegWrite, RegDst, EPCWrite, ShiftControl, ShiftAmt, ShiftSrc, WriteA, WriteB, WriteAuxA, reset, DIV0, LT, GT, EG, Zero, OverfLow, OFFSET[5:0]);
 
 endmodule
