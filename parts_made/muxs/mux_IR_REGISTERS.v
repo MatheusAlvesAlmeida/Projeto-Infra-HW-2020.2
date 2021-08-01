@@ -1,5 +1,5 @@
 module mux_IR_REGISTERS (
-  input  wire [1:0]  RegDst,
+  input  wire [2:0]  RegDst,
   input  wire [31:0] input_1,
   input  wire [31:0] input_2,
   
