@@ -120,15 +120,14 @@ module cpu (
     );
 
     Memoria MEM_(
+        mux_PC_MEMORY_out,
         clk,
         MemWrite,
-        MemRead,
-        mux_PC_MEMORY_out,
         SetSize_output,
         Memory_output
     );
 
-    Inst_Reg IR_(
+    Instr_Reg IR_(
         clk,
         reset,
         IRWrite,
@@ -149,7 +148,6 @@ module cpu (
     Registrador MemDataReg_(
         clk,
         reset,
-        load,
         MemoryDataRegister_write,
         Memory_output,
         MemoryDataRegister_output
@@ -366,7 +364,7 @@ module cpu (
         ShifLeft_2_down_output
     );
 
-    signExtend_16_32 signExtend16_32_(
+    sign_extend_16_32 signExtend16_32_(
         inst_6_10,
         SignExtend_16_32_output
     );
@@ -383,6 +381,45 @@ module cpu (
         ReadData2_output
     );
     
-    ctrl_unit_(clk, reset, OPCODE, PCWriteCond, PCWrite, IorD, MemRead, MemWrite, MemToReg, IRWrite, MultOrDiv, HIWrite, LOWrite, Exception, DetSizeCtrl, SetSizeCtrl, ALUOutWrite, PCSource, ALUOp, ALUSrcB, ALUSrcA, RegWrite, RegDst, EPCWrite, ShiftControl, ShiftAmt, ShiftSrc, WriteA, WriteB, WriteAuxA, reset, DIV0, LT, GT, EG, Zero, OverfLow, OFFSET[5:0]);
+    ctrl_unit ctrl_unity_(
+	    clk,
+	    reset,
+	    OPCODE,
+	    PCWriteCond,
+	    PCWrite,
+	    IorD,
+	    MemRead,
+	    MemWrite,
+	    MemToReg,
+        IRWrite,
+        MultOrDiv,
+        HIWrite,
+        LOWrite,
+        Exception,
+        DetSizeCtrl,
+        SetSizeCtrl,
+        ALUoutputWrite,
+        PCSource,
+        ALUOp,
+        ALUSrcB,
+        ALUSrcA,
+        RegWrite,
+        RegDst,
+        EPCWrite,
+        ShiftControl,
+        ShiftAmt,
+        ShiftSrc,
+        WriteA,
+        WriteB,
+        WriteAuxA,
+        reset,
+        Div0,
+        LT,
+        GT,
+        EG,
+        Zero,
+        OverfLow,
+        OFFSET[5:0]
+    );
 
 endmodule
