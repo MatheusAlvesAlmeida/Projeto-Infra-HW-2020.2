@@ -188,30 +188,40 @@ module cpu (
     );
 
     Registrador HI_(
+        clk,
+        reset,
         HIWrite,
         mux_HI_output,
         HI_output
     );
 
     Registrador LO_(
+        clk,
+        reset,
         LOWrite,
         mux_LO_output,
         LO_output
     );
 
     Registrador A_(
+        clk,
+        reset,
         WriteA,
         ReadData1_output,
         A_output
     );
 
     Registrador AuxA_(
+        clk,
+        reset,
         WriteAuxA,
         MemoryDataRegister_output,
         aux_A_output
     );
 
     Registrador B_(
+        clk,
+        reset,
         WriteB,
         ReadData2_output,
         B_output
@@ -304,6 +314,8 @@ module cpu (
     );
 
     RegDesloc regDesloc_(
+        clk,
+        reset,
         ShiftControl,
         mux_SHIFT_SRC_output,
         mux_SHIFT_AMT_output,
@@ -311,6 +323,8 @@ module cpu (
     );
 
     Registrador ALUOut_(
+        clk,
+        reset,
         ALUOutWrite,
         ALUResult,
         ALUOut_output
@@ -324,6 +338,8 @@ module cpu (
     );
 
     Registrador EPC_(
+        clk,
+        reset,
         EPCWrite,
         PC_output,
         EPC_output
@@ -356,6 +372,8 @@ module cpu (
     );
 
     Banco_reg Registers_(
+        clk,
+        reset,
         RegWrite,
         inst_21_25,
         inst_16_20,
