@@ -192,8 +192,8 @@ always @(posedge clk) begin
             DetSizeCtrl    = 2'b00;
             SetSizeCtrl    = 2'b00;
             ALUoutputWrite = 1'b0;
-            RegWrite       = 1'b0;
-            RegDst         = 3'b000;
+            RegWrite       = 1'b1;
+            RegDst         = 3'b011;
             ShiftControl   = 3'b000;
             ShiftAmt       = 2'b00;
             ShiftSrc       = 2'b00;
@@ -229,8 +229,8 @@ always @(posedge clk) begin
                 DetSizeCtrl    = 2'b00;
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
                 ShiftSrc       = 2'b00;
@@ -272,8 +272,8 @@ always @(posedge clk) begin
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b000;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
@@ -306,8 +306,8 @@ always @(posedge clk) begin
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b000;
-                RegWrite       = 1'b0;            
-                RegDst         = 3'b000;
+                RegWrite       = 1'b1;          
+                RegDst         = 3'b011;
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
@@ -481,8 +481,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b001;// +
                         ALUSrcA        = 2'b01; // A
                         ALUSrcB        = 3'b000;// B
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -512,7 +512,7 @@ always @(posedge clk) begin
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
                         RegWrite       = 1'b1; //escreve no registrador
-                        RegDst         = 3'b000;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -550,8 +550,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b011;// &
                         ALUSrcA        = 2'b01; // A
                         ALUSrcB        = 3'b000;// B
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -581,7 +581,7 @@ always @(posedge clk) begin
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
                         RegWrite       = 1'b1; //escreve no registrador
-                        RegDst         = 3'b000;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -619,8 +619,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b000;
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -649,8 +649,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b000;
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;                        
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;                        
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -682,8 +682,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b000;
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;                        
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;                        
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -715,8 +715,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b000;
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;                        
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;                        
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -760,8 +760,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b000;
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;                        
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;                        
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -791,8 +791,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b000;
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;                        
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;                        
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -824,8 +824,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b000;
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;                        
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;                        
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -857,8 +857,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b000;
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;                        
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;                        
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -894,8 +894,8 @@ always @(posedge clk) begin
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
                 MemToReg       = 3'b000;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;                        
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;                        
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
@@ -932,7 +932,7 @@ always @(posedge clk) begin
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b000;
-                RegDst         = 3'b000;                        
+                RegDst         = 3'b011;                        
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
@@ -965,7 +965,7 @@ always @(posedge clk) begin
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 3'b000;
-                RegDst         = 3'b000;                        
+                RegDst         = 3'b011;                        
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
@@ -1066,8 +1066,8 @@ always @(posedge clk) begin
                 ALUOp          = 3'b111;
                 ALUSrcA        = 2'b01;
                 ALUSrcB        = 3'b000;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;                        
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;                        
                 EPCWrite       = 1'b1;
                 WriteA         = 1'b1;
                 WriteB         = 1'b1;
@@ -1131,8 +1131,8 @@ always @(posedge clk) begin
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 2'b00;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;
                 EPCWrite       = 1'b0;
                 WriteA         = 1'b0;
                 WriteB         = 1'b0;
@@ -1199,8 +1199,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b010;// -
                         ALUSrcA        = 2'b01; // A
                         ALUSrcB        = 3'b000;// B
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1230,7 +1230,7 @@ always @(posedge clk) begin
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
                         RegWrite       = 1'b1; //escreve no registrador
-                        RegDst         = 3'b000;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1268,8 +1268,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b010;// -
                         ALUSrcA        = 2'b00; // PC
                         ALUSrcB        = 3'b001;// 4
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1298,8 +1298,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b000;
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1337,8 +1337,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b000;
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1371,8 +1371,8 @@ always @(posedge clk) begin
                         SetSizeCtrl    = 2'b00;
                         PCSource       = 2'b00;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1401,8 +1401,8 @@ always @(posedge clk) begin
                         SetSizeCtrl    = 2'b00;
                         PCSource       = 2'b00;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1435,8 +1435,8 @@ always @(posedge clk) begin
                         SetSizeCtrl    = 2'b00;
                         PCSource       = 2'b00;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1466,8 +1466,8 @@ always @(posedge clk) begin
                         SetSizeCtrl    = 2'b00;
                         PCSource       = 2'b00;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1496,8 +1496,8 @@ always @(posedge clk) begin
                         Exception      = 1'b0;
                         PCSource       = 2'b00;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1527,8 +1527,8 @@ always @(posedge clk) begin
                         LOWrite        = 1'b0;
                         Exception      = 1'b0;
                         PCSource       = 2'b00;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1573,8 +1573,8 @@ always @(posedge clk) begin
                         Exception      = 1'b0;
                         DetSizeCtrl    = 2'b00;
                         SetSizeCtrl    = 2'b00;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1604,8 +1604,8 @@ always @(posedge clk) begin
                         Exception      = 1'b0;
                         DetSizeCtrl    = 2'b00;
                         SetSizeCtrl    = 2'b00;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1677,8 +1677,8 @@ always @(posedge clk) begin
                         Exception      = 1'b0;
                         DetSizeCtrl    = 2'b00;
                         SetSizeCtrl    = 2'b00;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1708,8 +1708,8 @@ always @(posedge clk) begin
                         Exception      = 1'b0;
                         DetSizeCtrl    = 2'b00;
                         SetSizeCtrl    = 2'b00;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1774,8 +1774,8 @@ always @(posedge clk) begin
                         DetSizeCtrl    = 2'b00;
                         SetSizeCtrl    = 2'b00;
                         ALUOp          = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1806,8 +1806,8 @@ always @(posedge clk) begin
                         DetSizeCtrl    = 2'b00;
                         SetSizeCtrl    = 2'b00;
                         ALUoutputWrite = 1'b0;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1851,8 +1851,8 @@ always @(posedge clk) begin
                 DetSizeCtrl    = 2'b00;
                 SetSizeCtrl    = 2'b00;
                 ALUOp          = 3'b000;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
@@ -1887,8 +1887,8 @@ always @(posedge clk) begin
                         DetSizeCtrl    = 2'b00;
                         SetSizeCtrl    = 2'b00;
                         ALUOp          = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1920,8 +1920,8 @@ always @(posedge clk) begin
                         DetSizeCtrl    = 2'b00;
                         SetSizeCtrl    = 2'b00;
                         ALUoutputWrite = 1'b0;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1954,8 +1954,8 @@ always @(posedge clk) begin
                         DetSizeCtrl    = 2'b00;
                         SetSizeCtrl    = 2'b00;
                         ALUoutputWrite = 1'b0;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -1999,8 +1999,8 @@ always @(posedge clk) begin
                         DetSizeCtrl    = 2'b00;
                         SetSizeCtrl    = 2'b00;
                         ALUOp          = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -2032,8 +2032,8 @@ always @(posedge clk) begin
                         DetSizeCtrl    = 2'b00;
                         SetSizeCtrl    = 2'b00;
                         ALUoutputWrite = 1'b0;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -2076,8 +2076,8 @@ always @(posedge clk) begin
                 Exception      = 1'b0;
                 DetSizeCtrl    = 2'b00;
                 SetSizeCtrl    = 2'b00;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
@@ -2111,8 +2111,8 @@ always @(posedge clk) begin
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 2'b00;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
@@ -2175,8 +2175,8 @@ always @(posedge clk) begin
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 2'b00;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;
                 EPCWrite       = 1'b0;
                 WriteA         = 1'b0;
                 WriteB         = 1'b0;
@@ -2207,8 +2207,8 @@ always @(posedge clk) begin
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 2'b00;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
@@ -2250,8 +2250,8 @@ always @(posedge clk) begin
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 2'b00;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
@@ -2302,7 +2302,7 @@ always @(posedge clk) begin
                 WriteAuxA      = 1'b0;
                 MultOrDiv      = 1'b0;
 
-                RegDst         = 3'b000;
+                RegDst         = 3'b011;
                 RegWrite       = 1'b1;
                 MemToReg       = 3'b100;
 
@@ -2335,7 +2335,7 @@ always @(posedge clk) begin
                 WriteAuxA      = 1'b0;
                 MultOrDiv      = 1'b0;
 
-                RegDst         = 3'b000;
+                RegDst         = 3'b011;
                 RegWrite       = 1'b1;
                 MemToReg       = 3'b001;
 
@@ -2358,8 +2358,8 @@ always @(posedge clk) begin
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 2'b00;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
@@ -2400,8 +2400,8 @@ always @(posedge clk) begin
                 ALUOp          = 3'b000;
                 ALUSrcA        = 2'b00;
                 ALUSrcB        = 2'b00;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;
                 EPCWrite       = 1'b0;
                 WriteA         = 1'b0;
                 WriteB         = 1'b0;
@@ -2430,8 +2430,8 @@ always @(posedge clk) begin
                 DetSizeCtrl    = 2'b00;
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;
                 EPCWrite       = 1'b0;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
@@ -2474,7 +2474,7 @@ always @(posedge clk) begin
                 WriteAuxA      = 1'b0;
                 MultOrDiv      = 1'b0;
 
-                RegDst         = 3'b000;
+                RegDst         = 3'b011;
                 RegWrite       = 1'b1;
                 MemToReg       = 3'b101;
 
@@ -2501,8 +2501,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b000;
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 2'b00;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -2534,8 +2534,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b000;
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 2'b00;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -2571,8 +2571,8 @@ always @(posedge clk) begin
                         SetSizeCtrl    = 2'b00;
                         ALUOp          = 3'b000;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -2615,7 +2615,7 @@ always @(posedge clk) begin
                         RegWrite       = 1'b1;
                         MemToReg       = 3'b000;
                         //Errado deve ir para o reg31 *************************************************************************************************************************
-                        RegDst         = 3'b000;
+                        RegDst         = 3'b011;
 
                         state = stateCOMMON;
                     end
@@ -2638,8 +2638,8 @@ always @(posedge clk) begin
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
                 PCSource       = 2'b00;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
                 ShiftSrc       = 2'b00;
@@ -2679,8 +2679,8 @@ always @(posedge clk) begin
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
                 PCSource       = 2'b00;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
                 ShiftSrc       = 2'b00;
@@ -2720,8 +2720,8 @@ always @(posedge clk) begin
                 SetSizeCtrl    = 2'b00;
                 ALUoutputWrite = 1'b0;
                 PCSource       = 2'b00;
-                RegWrite       = 1'b0;
-                RegDst         = 3'b000;
+                RegWrite       = 1'b1;
+                RegDst         = 3'b011;
                 ShiftControl   = 3'b000;
                 ShiftAmt       = 2'b00;
                 ShiftSrc       = 2'b00;
@@ -2767,8 +2767,8 @@ always @(posedge clk) begin
                         ALUOp          = 3'b000;
                         ALUSrcA        = 2'b00;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
@@ -2797,8 +2797,8 @@ always @(posedge clk) begin
                         PCSource       = 2'b00;
                         ALUOp          = 3'b000;
                         ALUSrcB        = 3'b000;
-                        RegWrite       = 1'b0;
-                        RegDst         = 3'b000;
+                        RegWrite       = 1'b1;
+                        RegDst         = 3'b011;
                         EPCWrite       = 1'b0;
                         ShiftControl   = 3'b000;
                         ShiftAmt       = 2'b00;
